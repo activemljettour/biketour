@@ -1,0 +1,2624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#060E14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ActiveMljet">
+<title>ActiveMljet · eBike Adventure OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;background:#060E14;color:#E8F4F8;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+:root{
+  --sea:#0077B6;--sea-l:#00B4D8;--sea-d:#03045E;
+  --pine:#2D5A27;--pine-l:#52B788;--pine-m:#40916C;
+  --sand:#F4D58D;--coral:#EF233C;--amber:#F48C06;
+  --bg:#060E14;--bg2:#0D1B2A;--bg3:#162032;
+  --border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.18);
+  --muted:#5E8A99;--muted2:#8DAAB5;
+  --r:16px;--rs:10px;
+}
+
+/* SPLASH */
+#splash{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:radial-gradient(ellipse at 50% 100%,#0D2B1F 0%,#041520 55%,#02080E 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.7s,transform 0.7s;}
+#splash.out{opacity:0;transform:scale(1.04);pointer-events:none;}
+.s-wave{position:absolute;bottom:0;left:0;right:0;height:180px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 180'%3E%3Cpath fill='rgba(0,119,182,0.12)' d='M0,80 C360,160 720,0 1080,80 C1260,120 1380,60 1440,80 L1440,180 L0,180Z'/%3E%3C/svg%3E") no-repeat bottom/100%;pointer-events:none;}
+
+/* PDF HERO LOGO at top of splash */
+.pdf-hero{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:18px;
+  animation:heroFloat 4s ease-in-out infinite;
+}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+.pdf-hero-icon{position:relative;width:88px;height:104px;flex-shrink:0;}
+.pdf-hero-doc{
+  position:absolute;top:0;left:0;width:80px;height:100px;
+  background:linear-gradient(135deg,#fff 0%,#f4f6f8 100%);
+  border-radius:6px 18px 6px 6px;
+  box-shadow:0 14px 40px rgba(239,35,60,0.32),0 0 0 1px rgba(255,255,255,0.1);
+  overflow:hidden;
+}
+.pdf-hero-doc::before{
+  content:'';position:absolute;top:0;right:0;width:18px;height:18px;
+  background:linear-gradient(225deg,rgba(0,0,0,0.18) 50%,transparent 50%);
+}
+.pdf-hero-pages{
+  position:absolute;top:18px;left:10px;right:10px;height:55px;
+  background:
+    linear-gradient(to bottom,
+      transparent 0%,transparent 7px,
+      rgba(110,30,40,0.5) 7px,rgba(110,30,40,0.5) 8px,
+      transparent 8px,transparent 15px,
+      rgba(110,30,40,0.5) 15px,rgba(110,30,40,0.5) 16px,
+      transparent 16px,transparent 23px,
+      rgba(110,30,40,0.5) 23px,rgba(110,30,40,0.5) 24px,
+      transparent 24px,transparent 31px,
+      rgba(110,30,40,0.5) 31px,rgba(110,30,40,0.5) 32px,
+      transparent 32px,transparent 39px,
+      rgba(110,30,40,0.5) 39px,rgba(110,30,40,0.5) 40px,
+      transparent 40px);
+}
+.pdf-hero-label{
+  position:absolute;left:8px;right:8px;bottom:10px;
+  background:#EF233C;color:#fff;
+  font-family:'Space Mono',monospace;font-weight:700;
+  font-size:0.78rem;text-align:center;
+  padding:4px 0;border-radius:3px;
+  letter-spacing:1px;
+  box-shadow:0 2px 6px rgba(239,35,60,0.4);
+}
+.pdf-hero-dl{
+  position:absolute;bottom:-4px;right:-4px;
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,#52B788,#40916C);
+  color:#fff;font-size:1.1rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 18px rgba(82,183,136,0.5),0 0 0 3px rgba(6,14,20,0.95);
+  animation:dlPulse 2s ease-in-out infinite;
+}
+@keyframes dlPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+
+.pdf-hero-text{display:flex;flex-direction:column;line-height:1;}
+.pdf-hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:2.4rem;color:#fff;font-style:italic;
+  letter-spacing:-0.5px;
+}
+.pdf-hero-subtitle{
+  font-family:'Space Mono',monospace;
+  font-size:0.62rem;color:#F4D58D;
+  text-transform:uppercase;letter-spacing:3.5px;
+  margin-top:6px;opacity:0.85;
+}
+
+.s-logo{font-family:'DM Sans',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:-1.5px;text-align:center;line-height:1;margin-bottom:5px;}
+.s-logo .l-hash{color:#1B7BA7;}
+.s-logo .l-act{color:#A8C82E;}
+.s-logo .l-ive{color:#A8C82E;}
+.s-logo .l-m{color:#1B7BA7;}
+.s-logo .l-ljet{color:#1B7BA7;}
+.s-tag{font-family:'Space Mono',monospace;font-size:0.5rem;letter-spacing:4px;color:rgba(244,213,141,0.7);text-transform:uppercase;margin-bottom:18px;}
+
+/* PDF Download button */
+.pdf-btn{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(82,183,136,0.13);
+  border:1px solid rgba(82,183,136,0.4);
+  border-radius:14px;
+  padding:10px 14px;
+  margin-bottom:18px;
+  color:#E8F4F8;
+  text-decoration:none;
+  width:280px;
+  max-width:78vw;
+  cursor:pointer;
+  transition:all 0.18s;
+  -webkit-tap-highlight-color:transparent;
+  box-shadow:0 4px 16px rgba(82,183,136,0.15);
+}
+.pdf-btn:active{transform:scale(0.97);background:rgba(82,183,136,0.22);}
+.pdf-btn-ico{font-size:1.5rem;flex-shrink:0;background:rgba(82,183,136,0.2);padding:7px;border-radius:9px;}
+.pdf-btn-txt{display:flex;flex-direction:column;flex:1;text-align:left;line-height:1.2;}
+.pdf-btn-title{font-size:0.83rem;font-weight:700;color:#52B788;}
+.pdf-btn-sub{font-size:0.6rem;color:rgba(255,255,255,0.55);font-family:'Space Mono',monospace;margin-top:2px;}
+.pdf-btn-arrow{font-size:1.1rem;color:#52B788;flex-shrink:0;}
+.lang-row{display:flex;gap:8px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;}
+
+/* Splash language dropdown */
+.lang-select{
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.18);
+  color:rgba(255,255,255,0.95);
+  padding:11px 36px 11px 18px;
+  border-radius:50px;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.95rem;
+  font-weight:600;
+  cursor:pointer;
+  -webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat:no-repeat;
+  background-position:right 12px center;
+  background-size:18px;
+  outline:none;
+  min-width:200px;
+  text-align:center;
+  text-align-last:center;
+}
+.lang-select option{background:#0d1b2a;color:#fff;}
+
+/* Header mini dropdown */
+.lang-select-mini{
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.16);
+  color:rgba(255,255,255,0.95);
+  padding:5px 22px 5px 8px;
+  border-radius:14px;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.72rem;
+  font-weight:700;
+  cursor:pointer;
+  -webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat:no-repeat;
+  background-position:right 4px center;
+  background-size:13px;
+  outline:none;
+}
+.lang-select-mini option{background:#0d1b2a;color:#fff;}
+.lbtn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:12px;padding:10px 18px;color:rgba(255,255,255,0.72);font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;-webkit-appearance:none;appearance:none;outline:none;min-width:72px;justify-content:center;transition:all 0.18s;}
+.lbtn.on{background:var(--sea);border-color:var(--sea-l);color:#fff;box-shadow:0 4px 16px rgba(0,119,182,0.5);}
+.lbtn:active{opacity:0.75;transform:scale(0.95);}
+.s-btn{background:linear-gradient(135deg,var(--sea),var(--sea-l));color:#fff;border:none;padding:16px 52px;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:1.05rem;font-weight:700;cursor:pointer;box-shadow:0 8px 30px rgba(0,119,182,0.5);-webkit-appearance:none;appearance:none;outline:none;display:block;}
+.s-btn:active{opacity:0.85;}
+
+/* APP */
+#app{position:fixed;top:0;left:0;right:0;bottom:0;display:none;flex-direction:column;}
+#app.show{display:flex;}
+
+/* HEADER */
+.hdr{background:rgba(6,14,20,0.96);border-bottom:1px solid var(--border);padding:11px 13px 8px;flex-shrink:0;z-index:50;}
+.hdr-r1{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.h-logo{font-family:'DM Sans',sans-serif;font-size:1.18rem;font-weight:800;letter-spacing:-0.6px;line-height:1;}
+.h-logo .l-hash{color:#1B7BA7;}
+.h-logo .l-act{color:#A8C82E;}
+.h-logo .l-ive{color:#A8C82E;}
+.h-logo .l-m{color:#1B7BA7;}
+.h-logo .l-ljet{color:#1B7BA7;}
+.h-right{display:flex;align-items:center;gap:6px;}
+.h-lang{display:flex;gap:3px;}
+.hlb{background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:7px;padding:4px 8px;color:var(--muted2);font-size:0.6rem;font-weight:700;cursor:pointer;font-family:'Space Mono',monospace;-webkit-appearance:none;appearance:none;outline:none;}
+.hlb.on{background:var(--sea);border-color:var(--sea-l);color:#fff;}
+.hlb:active{opacity:0.7;}
+.gps-pill{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-family:'Space Mono',monospace;font-size:0.57rem;color:#F4D58D;white-space:nowrap;}
+.gdot{width:7px;height:7px;border-radius:50%;background:#333;}
+.gdot.on{background:#52B788;animation:gp 1.8s infinite;}
+@keyframes gp{0%,100%{opacity:1}50%{opacity:0.4}}
+.sos-btn{background:linear-gradient(135deg,#C1121F,#EF233C);color:#fff;border:none;border-radius:20px;padding:5px 11px;font-family:'Space Mono',monospace;font-size:0.57rem;font-weight:700;cursor:pointer;box-shadow:0 0 12px rgba(239,35,60,0.4);-webkit-appearance:none;appearance:none;outline:none;}
+.sos-btn:active{opacity:0.8;}
+
+/* TABS */
+.tabs{display:flex;gap:3px;background:rgba(0,0,0,0.3);border-radius:11px;padding:3px;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.6rem;font-weight:600;border-radius:8px;cursor:pointer;-webkit-appearance:none;appearance:none;outline:none;}
+.tab .ti{font-size:0.9rem;}
+.tab.on{background:linear-gradient(135deg,var(--sea),rgba(0,180,216,0.85));color:#fff;}
+.tab:active{opacity:0.75;}
+
+/* PANELS */
+.panels{flex:1;overflow:hidden;position:relative;}
+.panel{position:absolute;top:0;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;display:none;padding-bottom:28px;}
+.panel.on{display:block;}
+
+/* MAP - Google Maps iframe */
+.map-wrap{position:relative;height:340px;background:#041520;border-bottom:1px solid var(--border);}
+.gmap-iframe{width:100%;height:100%;border:0;display:block;}
+.map-ribbon{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(to top,rgba(6,14,20,0.95) 0%,rgba(6,14,20,0.6) 60%,transparent 100%);padding:24px 12px 10px;display:flex;gap:8px;justify-content:space-between;align-items:flex-end;pointer-events:none;}
+.route-pill{background:rgba(0,180,216,0.18);border:1px solid rgba(0,180,216,0.4);color:#00B4D8;padding:5px 11px;border-radius:12px;font-family:'Space Mono',monospace;font-size:0.62rem;font-weight:700;letter-spacing:0.5px;backdrop-filter:blur(6px);pointer-events:auto;}
+.gpscentr-btn{background:rgba(82,183,136,0.2);border:1px solid rgba(82,183,136,0.5);color:#52B788;padding:5px 11px;border-radius:12px;font-family:'Space Mono',monospace;font-size:0.62rem;font-weight:700;cursor:pointer;-webkit-appearance:none;appearance:none;outline:none;pointer-events:auto;}
+.gpscentr-btn:active{opacity:0.7;}
+
+/* HQ button to return to Activemljet view */
+.hq-btn{
+  background:rgba(239,35,60,0.2);
+  border:1px solid rgba(239,35,60,0.5);
+  color:#ff8794;
+  padding:5px 11px;border-radius:12px;
+  font-family:'Space Mono',monospace;
+  font-size:0.62rem;font-weight:700;
+  cursor:pointer;
+  -webkit-appearance:none;appearance:none;outline:none;
+  pointer-events:auto;
+}
+.hq-btn:active{opacity:0.7;}
+
+/* WIP banner inside panels */
+.wip-banner{
+  background:linear-gradient(135deg,rgba(244,140,6,0.18),rgba(239,35,60,0.18));
+  border-bottom:1px solid rgba(244,140,6,0.4);
+  text-align:center;
+  padding:9px 13px;
+  font-size:1.4rem;
+  letter-spacing:6px;
+  color:#F48C06;
+}
+
+/* Floating Google Earth button overlay on the map */
+.map-earth-btn{
+  position:absolute;top:9px;left:9px;z-index:11;
+  background:linear-gradient(135deg,rgba(66,133,244,0.95),rgba(52,168,83,0.95));
+  color:#fff;border:1px solid rgba(255,255,255,0.3);
+  border-radius:14px;padding:7px 11px;
+  font-family:'DM Sans',sans-serif;font-size:0.7rem;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;gap:5px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.4);
+  -webkit-appearance:none;appearance:none;outline:none;
+  white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;
+}
+.map-earth-btn:active{transform:scale(0.95);opacity:0.85;}
+
+/* Weather */
+.wx{position:absolute;top:9px;right:9px;z-index:10;background:rgba(6,14,20,0.92);border:1px solid rgba(0,180,216,0.3);border-radius:13px;padding:8px 11px;min-width:108px;backdrop-filter:blur(8px);}
+.wx-t{font-family:'Space Mono',monospace;font-size:1.22rem;font-weight:700;color:#00B4D8;line-height:1;}
+.wx-r{display:flex;align-items:center;gap:4px;font-size:0.6rem;color:var(--muted2);margin-top:3px;}
+.wx-b{background:rgba(244,140,6,0.15);border:1px solid rgba(244,140,6,0.32);border-radius:6px;padding:2px 6px;font-size:0.52rem;font-weight:700;color:#F48C06;margin-top:4px;display:inline-block;}
+
+/* Stats bar */
+.sbar{display:flex;gap:4px;padding:9px 11px;background:rgba(6,14,20,0.97);border-bottom:1px solid var(--border);}
+.sc{flex:1;text-align:center;background:rgba(255,255,255,0.03);border-radius:9px;padding:6px 2px;}
+.sc-v{font-family:'Space Mono',monospace;font-size:0.98rem;font-weight:700;color:#00B4D8;line-height:1;}
+.sc-l{font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-top:2px;}
+
+/* Progress */
+.prog-wrap{padding:9px 13px 0;}
+.prog-row{display:flex;justify-content:space-between;font-size:0.66rem;color:var(--muted);margin-bottom:4px;}
+.prog-bar{height:5px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(to right,var(--sea),#52B788);border-radius:3px;transition:width 0.9s ease;width:0%;}
+
+/* CP Alert */
+.cp-al{margin:9px 13px 0;background:rgba(45,90,39,0.25);border:1px solid rgba(82,183,136,0.38);border-radius:var(--r);padding:12px 13px;display:flex;gap:9px;align-items:flex-start;}
+.cp-al-ico{font-size:1.5rem;background:rgba(0,0,0,0.2);padding:5px;border-radius:9px;flex-shrink:0;}
+.cp-al-ttl{font-weight:700;font-size:0.84rem;color:#52B788;}
+.cp-al-txt{font-size:0.7rem;color:var(--muted2);margin-top:2px;line-height:1.4;}
+
+/* Buttons */
+.ctrl{padding:10px 13px;display:flex;flex-direction:column;gap:8px;}
+.btn{width:100%;padding:13px;border-radius:var(--r);border:none;font-family:'DM Sans',sans-serif;font-size:0.92rem;font-weight:700;cursor:pointer;-webkit-appearance:none;appearance:none;outline:none;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity 0.15s;}
+.btn:active{opacity:0.8;}
+.btn-go{background:linear-gradient(135deg,var(--pine),var(--pine-m));color:#fff;box-shadow:0 4px 18px rgba(45,90,39,0.45);}
+.ctrl-row{display:flex;gap:8px;}
+.ctrl-row .btn{flex:1;}
+.btn-pause{background:rgba(255,255,255,0.08);color:#F4D58D;border:1px solid rgba(255,255,255,0.16);}
+.btn-end{background:linear-gradient(135deg,#C1121F,#EF233C);color:#fff;box-shadow:0 4px 16px rgba(239,35,60,0.35);}
+.btn-map{background:rgba(66,133,244,0.12);color:#4285F4;border:1px solid rgba(66,133,244,0.28);font-size:0.85rem;padding:11px;}
+
+/* Elevation */
+.elev-wrap{margin:9px 13px 0;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--r);padding:11px;}
+.elev-title{font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;font-weight:700;}
+.elev-svg{width:100%;height:56px;overflow:visible;}
+
+/* Section header */
+.sec-h{padding:15px 13px 7px;font-family:'Space Mono',monospace;font-size:0.57rem;letter-spacing:3px;color:var(--muted);text-transform:uppercase;font-weight:700;}
+
+/* Guide cards */
+.g-card{margin:0 13px 9px;background:rgba(13,27,42,0.9);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.g-head{display:flex;align-items:center;gap:9px;padding:12px 13px;background:rgba(0,119,182,0.1);cursor:pointer;}
+.g-head:active{background:rgba(0,119,182,0.18);}
+.g-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:0.7rem;font-weight:700;color:#fff;flex-shrink:0;}
+.g-ttl{font-weight:700;font-size:0.88rem;flex:1;}
+.g-sub{font-size:0.67rem;color:var(--muted2);margin-top:1px;}
+.g-km{font-size:0.63rem;color:#F4D58D;font-family:'Space Mono',monospace;background:rgba(0,0,0,0.3);padding:3px 8px;border-radius:8px;white-space:nowrap;}
+.g-chev{color:var(--muted);font-size:0.7rem;transition:transform 0.3s;margin-left:4px;}
+.g-card.open .g-chev{transform:rotate(180deg);}
+.g-body{display:none;padding:0 13px 13px;border-top:1px solid var(--border);}
+.g-card.open .g-body{display:block;}
+.g-img{width:100%;height:160px;background:linear-gradient(135deg,var(--bg2),var(--bg3));border-radius:var(--rs);margin:10px 0;display:flex;align-items:center;justify-content:center;font-size:3rem;background-size:cover;background-position:center;}
+.g-body p{font-size:0.78rem;line-height:1.68;color:rgba(232,244,248,0.85);margin-bottom:7px;}
+.g-hist{font-style:italic;color:#00B4D8;font-size:0.7rem;margin-bottom:7px;}
+.tip-item{font-size:0.74rem;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.8);}
+.tip-item:last-child{border-bottom:none;}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.tag{background:rgba(0,119,182,0.18);border:1px solid rgba(0,180,216,0.25);border-radius:20px;padding:3px 9px;font-size:0.61rem;color:#00B4D8;font-family:'Space Mono',monospace;}
+.tag.g{background:rgba(45,90,39,0.2);border-color:rgba(82,183,136,0.28);color:#52B788;}
+
+/* Tours */
+.tours-hero{height:130px;background:linear-gradient(135deg,#03045E,#0077B6 50%,#2D5A27);display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.th-ttl{font-family:'Playfair Display',serif;font-size:1.65rem;font-style:italic;color:#fff;}
+.th-sub{font-size:0.58rem;color:#F4D58D;font-family:'Space Mono',monospace;letter-spacing:3px;text-transform:uppercase;margin-top:5px;opacity:0.85;}
+.t-card{margin:0 13px 14px;background:rgba(13,27,42,0.95);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+
+/* ── New Tour Cards V2 — Navy / Cream / Gold theme ── */
+.t-card-v2{
+  margin:0 13px 18px;
+  background:linear-gradient(180deg,#FAF3E3 0%,#F4E8D0 100%);
+  border:1px solid rgba(212,175,95,0.25);
+  border-radius:18px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 6px 22px rgba(10,31,58,0.18), 0 2px 6px rgba(10,31,58,0.08);
+  color:#0A1F3A;
+}
+.t-illust{height:170px;width:100%;overflow:hidden;}
+.t-illust svg{display:block;}
+.t-ribbon{
+  position:absolute;top:14px;right:14px;z-index:5;
+  background:rgba(255,255,255,0.95);
+  padding:5px 11px;border-radius:18px;
+  font-family:'Space Mono',monospace;
+  font-size:0.6rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+}
+.t-card-v2 .t-ribbon.d-easy{color:#2D7A4A;border:1px solid rgba(45,122,74,0.35);}
+.t-card-v2 .t-ribbon.d-med{color:#A86F1F;border:1px solid rgba(168,111,31,0.35);}
+.t-card-v2 .t-ribbon.d-hard{color:#9F2B3A;border:1px solid rgba(159,43,58,0.35);}
+.t-card-v2 .t-ribbon.d-expert{color:#5B2A8A;border:1px solid rgba(91,42,138,0.35);}
+.t-card-v2 .t-body{padding:18px 16px 16px;background:transparent;}
+.t-card-v2 .t-route-label{
+  font-family:'Space Mono',monospace;
+  font-size:0.62rem;color:#A88438;
+  letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.t-card-v2 .t-name{
+  font-family:'Playfair Display',serif;
+  font-size:1.45rem;color:#0A1F3A;
+  font-weight:700;line-height:1.15;
+  margin-bottom:10px;
+  font-style:normal;
+}
+.t-card-v2 .t-desc{
+  font-size:0.84rem;color:#4A4030;
+  line-height:1.6;margin-bottom:14px;
+}
+.t-stats-row{
+  display:flex;gap:6px;
+  padding:10px 0;
+  border-top:1px solid rgba(10,31,58,0.12);
+  border-bottom:1px solid rgba(10,31,58,0.12);
+  margin-bottom:14px;
+}
+.t-stat{flex:1;text-align:center;}
+.t-stat-v{font-family:'Space Mono',monospace;font-size:0.85rem;font-weight:700;color:#0A1F3A;line-height:1;}
+.t-stat-l{font-size:0.55rem;color:#7A7160;text-transform:uppercase;letter-spacing:0.8px;margin-top:4px;}
+.t-card-v2 .t-stops{
+  list-style:none;margin-bottom:14px;padding:0;
+}
+.t-card-v2 .t-stop{
+  font-size:0.78rem;color:#0A1F3A;
+  padding:5px 0;display:flex;align-items:flex-start;gap:7px;
+  border-bottom:1px solid rgba(10,31,58,0.06);
+}
+.t-card-v2 .t-stop:last-child{border-bottom:none;}
+.t-card-v2 .t-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#D4AF5F;flex-shrink:0;margin-top:7px;
+}
+.t-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid rgba(212,175,95,0.3);
+}
+.t-price{display:flex;flex-direction:column;}
+.t-price-num{
+  font-family:'Playfair Display',serif;
+  font-size:1.55rem;font-weight:700;
+  color:#0A1F3A;line-height:1;
+}
+.t-price-lbl{
+  font-size:0.6rem;color:#7A7160;
+  text-transform:uppercase;letter-spacing:1.2px;
+  margin-top:3px;
+}
+.t-book-btn{
+  background:linear-gradient(135deg,#0A1F3A 0%,#142A4D 100%);
+  color:#F4E8D0;border:none;
+  padding:11px 18px;border-radius:50px;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.82rem;font-weight:700;
+  letter-spacing:0.4px;cursor:pointer;
+  display:flex;align-items:center;gap:5px;
+  -webkit-appearance:none;appearance:none;outline:none;
+  box-shadow:0 3px 12px rgba(10,31,58,0.25);
+  white-space:nowrap;
+  transition:all 0.2s;
+}
+.t-book-btn:active{transform:scale(0.96);background:linear-gradient(135deg,#A88438 0%,#D4AF5F 100%);}
+.t-book-arrow{font-size:0.95rem;}
+
+@media(max-width:380px){
+  .t-bottom{flex-direction:column;align-items:stretch;gap:11px;}
+  .t-price{flex-direction:row;align-items:baseline;gap:8px;}
+  .t-book-btn{justify-content:center;width:100%;}
+}
+.t-banner{height:140px;position:relative;overflow:hidden;display:flex;align-items:flex-end;}
+.t-bg{position:absolute;top:0;left:0;right:0;bottom:0;background-size:cover;background-position:center;}
+.t-ov{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(to bottom,transparent 0%,rgba(6,14,20,0.92) 100%);}
+.t-bc{position:relative;z-index:1;padding:11px 13px;width:100%;}
+.t-name{font-family:'Playfair Display',serif;font-size:1.12rem;color:#fff;font-weight:700;}
+.t-sub{font-size:0.69rem;color:rgba(255,255,255,0.65);margin-top:2px;}
+.diff{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.57rem;font-weight:700;font-family:'Space Mono',monospace;margin-bottom:4px;}
+.d-easy{background:rgba(82,183,136,0.3);border:1px solid rgba(82,183,136,0.5);color:#52B788;}
+.d-med{background:rgba(244,140,6,0.2);border:1px solid rgba(244,140,6,0.4);color:#F48C06;}
+.d-hard{background:rgba(239,35,60,0.2);border:1px solid rgba(239,35,60,0.4);color:#EF233C;}
+.d-expert{background:rgba(150,40,200,0.2);border:1px solid rgba(150,40,200,0.4);color:#C77DFF;}
+.t-stats{display:flex;gap:5px;padding:9px 13px;border-bottom:1px solid var(--border);}
+.ts{flex:1;text-align:center;background:rgba(255,255,255,0.03);border-radius:9px;padding:7px 3px;}
+.ts-v{font-family:'Space Mono',monospace;font-size:0.88rem;font-weight:700;color:#00B4D8;line-height:1;}
+.ts-l{font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:3px;}
+.t-map-wrap{height:200px;overflow:hidden;position:relative;border-bottom:1px solid var(--border);}
+.t-map-wrap iframe{width:100%;height:100%;border:0;display:block;}
+.t-body{padding:13px;}
+.t-body p{font-size:0.78rem;line-height:1.68;color:rgba(232,244,248,0.82);margin-bottom:9px;}
+.t-stops{list-style:none;}
+.t-stop{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.74rem;}
+.t-stop:last-child{border-bottom:none;}
+.t-dot{width:7px;height:7px;border-radius:50%;background:#00B4D8;flex-shrink:0;}
+.t-go-btn{width:100%;margin-top:11px;padding:13px;border:none;border-radius:var(--r);background:linear-gradient(135deg,var(--sea),var(--sea-l));color:#fff;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;-webkit-appearance:none;appearance:none;outline:none;}
+.t-go-btn:active{opacity:0.8;}
+
+/* Nature */
+.nat-hero{height:145px;background:linear-gradient(135deg,#03045E,#0077B6 50%,#2D5A27);display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.nh-ttl{font-family:'Playfair Display',serif;font-size:1.75rem;font-style:italic;color:#fff;}
+.nh-sub{font-size:0.58rem;color:#F4D58D;font-family:'Space Mono',monospace;letter-spacing:3px;text-transform:uppercase;margin-top:5px;opacity:0.85;}
+.warn{margin:0 13px 9px;border-radius:var(--r);padding:13px 13px 13px 14px;display:flex;gap:10px;align-items:flex-start;}
+.warn.water{background:rgba(0,119,182,0.18);border:1px solid rgba(0,180,216,0.35);}
+.warn.heat{background:rgba(244,140,6,0.15);border:1px solid rgba(244,140,6,0.4);}
+.warn-ico{font-size:1.5rem;flex-shrink:0;}
+.warn-ttl{font-weight:700;font-size:0.85rem;color:#fff;margin-bottom:4px;}
+.warn-txt{font-size:0.74rem;color:rgba(232,244,248,0.82);line-height:1.55;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 13px 9px;}
+.sg{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:var(--rs);padding:13px;text-align:center;}
+.sg-v{font-family:'Space Mono',monospace;font-size:1.08rem;color:#00B4D8;font-weight:700;}
+.sg-l{font-size:0.57rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
+.n-card{margin:0 13px 9px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--r);padding:13px;}
+.n-ttl{font-family:'Playfair Display',serif;font-size:0.95rem;color:#F4D58D;margin-bottom:6px;}
+.n-card p{font-size:0.76rem;line-height:1.68;color:rgba(232,244,248,0.76);}
+.sp-ul{list-style:none;}
+.sp-li{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.75rem;}
+.sp-li:last-child{border-bottom:none;}
+.sp-ico{font-size:1rem;background:rgba(0,0,0,0.22);padding:5px;border-radius:9px;flex-shrink:0;}
+.sp-n{font-weight:600;}
+.sp-s{font-style:italic;color:var(--muted);font-size:0.66rem;margin-top:2px;}
+
+/* Stats panel */
+.big-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:13px;}
+.bg-box{background:rgba(0,119,182,0.18);border:1px solid rgba(0,180,216,0.2);border-radius:var(--r);padding:16px;text-align:center;}
+.bg-v{font-family:'Space Mono',monospace;font-size:1.75rem;font-weight:700;color:#00B4D8;line-height:1;}
+.bg-u{font-size:0.7rem;color:var(--muted);}
+.bg-l{font-size:0.57rem;color:var(--muted);margin-top:5px;text-transform:uppercase;letter-spacing:1px;font-weight:700;}
+.vis-list{padding:0 13px;}
+.vis-row{display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.vis-row:last-child{border-bottom:none;}
+.vis-ball{width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;font-family:'Space Mono',monospace;flex-shrink:0;}
+.vis-ball.d{background:var(--pine-m);color:#fff;}
+.vis-ball.p{background:rgba(255,255,255,0.07);color:var(--muted);}
+.vis-name{font-size:0.82rem;font-weight:600;flex:1;}
+.vis-sub{font-size:0.65rem;color:var(--muted);margin-top:1px;}
+.vis-km{font-size:0.65rem;color:#F4D58D;font-family:'Space Mono',monospace;background:rgba(0,0,0,0.3);padding:3px 7px;border-radius:7px;white-space:nowrap;}
+
+/* Toast */
+.toast{position:fixed;top:-90px;left:13px;right:13px;z-index:9000;background:rgba(13,27,42,0.97);border:1px solid rgba(82,183,136,0.3);border-radius:var(--r);padding:13px;box-shadow:0 10px 36px rgba(0,0,0,0.5);display:flex;gap:9px;align-items:center;transition:top 0.45s cubic-bezier(0.34,1.56,0.64,1);}
+.toast.show{top:76px;}
+.toast-ico{font-size:1.8rem;background:rgba(0,0,0,0.2);padding:7px;border-radius:10px;flex-shrink:0;}
+.toast-ttl{font-weight:700;font-size:0.85rem;}
+.toast-txt{font-size:0.7rem;color:rgba(232,244,248,0.72);margin-top:1px;}
+
+/* SOS */
+/* SOS */
+.sos-modal{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9500;background:rgba(0,0,0,0.82);display:none;align-items:center;justify-content:center;padding:24px;-webkit-overflow-scrolling:touch;}
+.sos-modal.open{display:flex;}
+.sos-box{background:#140305;border:2px solid rgba(239,35,60,0.5);border-radius:22px;padding:24px 20px;text-align:center;max-width:340px;width:100%;max-height:92vh;overflow-y:auto;}
+.sos-box-confirm{border-color:rgba(82,183,136,0.5);background:#031408;}
+.sos-box-gps{border-color:rgba(0,180,216,0.5);background:#031420;}
+.gps-help-body{font-size:0.82rem;color:rgba(232,244,248,0.85);line-height:1.6;text-align:left;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;margin-bottom:18px;}
+.gps-help-body strong{color:#00B4D8;}
+.gps-help-body ol{padding-left:18px;margin:6px 0;}
+.gps-help-body li{margin:5px 0;}
+.sos-icon-big{font-size:3rem;margin-bottom:8px;animation:sospulse 1.5s ease-in-out infinite;}
+@keyframes sospulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.sos-ttl{font-family:'Playfair Display',serif;font-size:1.4rem;color:#EF233C;margin-bottom:3px;}
+.sos-box-confirm .sos-ttl{color:#52B788;}
+.sos-subtitle{font-size:0.7rem;color:rgba(244,213,141,0.85);margin-bottom:10px;font-family:'Space Mono',monospace;letter-spacing:0.5px;}
+.sos-hours{font-size:0.72rem;color:#52B788;background:rgba(82,183,136,0.1);border:1px solid rgba(82,183,136,0.3);border-radius:10px;padding:7px 10px;margin-bottom:12px;font-weight:600;}
+.sos-coords{font-family:'Space Mono',monospace;font-size:0.62rem;color:var(--muted2);margin-bottom:14px;background:rgba(255,255,255,0.05);padding:8px 10px;border-radius:9px;border:1px solid rgba(255,255,255,0.1);white-space:pre-line;line-height:1.5;}
+.sos-contact-name{font-size:0.78rem;color:#fff;font-weight:600;margin-bottom:4px;}
+.sos-contact-phone{font-family:'Space Mono',monospace;font-size:1.05rem;color:#EF233C;font-weight:700;margin-bottom:14px;letter-spacing:0.5px;}
+.sos-actions{display:flex;gap:8px;margin-bottom:14px;}
+.sos-act{flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:12px 8px;color:#fff;cursor:pointer;-webkit-appearance:none;appearance:none;outline:none;display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.sos-act:active{transform:scale(0.96);opacity:0.85;}
+.sos-act-call{background:linear-gradient(135deg,#EF233C,#C1121F);border-color:rgba(239,35,60,0.6);box-shadow:0 4px 14px rgba(239,35,60,0.3);}
+.sos-act-wa{background:linear-gradient(135deg,#25D366,#128C7E);border-color:rgba(37,211,102,0.6);box-shadow:0 4px 14px rgba(37,211,102,0.3);}
+.sos-act-confirm{background:linear-gradient(135deg,#52B788,#40916C);border-color:rgba(82,183,136,0.6);box-shadow:0 4px 14px rgba(82,183,136,0.3);}
+.sos-act-cancel{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.18);}
+.sos-act-ico{font-size:1.3rem;}
+.sos-act-txt{font-size:0.8rem;font-weight:700;}
+.sos-info{font-size:0.68rem;color:rgba(232,244,248,0.6);margin-bottom:14px;line-height:1.5;padding:0 4px;}
+.sos-confirm-text{font-size:0.84rem;color:rgba(255,255,255,0.85);margin-bottom:18px;line-height:1.5;padding:0 8px;}
+.sos-cancel{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);padding:10px 28px;border-radius:50px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.84rem;-webkit-appearance:none;appearance:none;outline:none;}
+.sos-cancel:active{opacity:0.75;}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="s-wave"></div>
+  <div class="pdf-hero">
+    <div class="pdf-hero-icon">
+      <div class="pdf-hero-doc">
+        <div class="pdf-hero-pages"></div>
+        <div class="pdf-hero-label">PDF</div>
+      </div>
+      <div class="pdf-hero-dl">⬇</div>
+    </div>
+    <div class="pdf-hero-text">
+      <div class="pdf-hero-title">Mljet</div>
+      <div class="pdf-hero-subtitle">PDF Guide</div>
+    </div>
+  </div>
+  <div class="s-logo"><span class="l-hash">#</span><span class="l-act">act</span><span class="l-ive">ive</span><span class="l-m">m</span><span class="l-ljet">ljet</span></div>
+  <div class="s-tag">eBike Adventure OS · v3.5</div>
+  <a class="pdf-btn" id="pdf-btn" href="Mljet_Guide.pdf" download="Mljet_Guide.pdf" rel="noopener">
+    <span class="pdf-btn-ico">📖</span>
+    <span class="pdf-btn-txt">
+      <span class="pdf-btn-title" data-k="pdf_title">Download PDF Guide</span>
+      <span class="pdf-btn-sub" data-k="pdf_sub">Free · 7 languages · 68 pages</span>
+    </span>
+    <span class="pdf-btn-arrow">⬇</span>
+  </a>
+  <div class="lang-row">
+    <select class="lang-select" id="splash-lang-select">
+      <option value="en">🇬🇧 English (EN)</option>
+      <option value="hr">🇭🇷 Hrvatski (HR)</option>
+      <option value="sl">🇸🇮 Slovenščina (SL)</option>
+      <option value="de">🇩🇪 Deutsch (DE)</option>
+      <option value="it">🇮🇹 Italiano (IT)</option>
+      <option value="es">🇪🇸 Español (ES)</option>
+      <option value="fr">🇫🇷 Français (FR)</option>
+    </select>
+  </div>
+  <button class="s-btn" id="s-btn">🚴 Start Adventure</button>
+</div>
+
+<!-- GPS HELP MODAL -->
+<div class="sos-modal" id="gps-help-modal">
+  <div class="sos-box sos-box-gps">
+    <div class="sos-icon-big" id="gps-help-icon">🔒</div>
+    <div class="sos-ttl" id="gps-help-title">Location Permission Needed</div>
+    <div class="gps-help-body" id="gps-help-body">Please enable location access...</div>
+    <button class="sos-cancel" id="gps-help-close">✓ <span data-k="gps_help_close">Got it</span></button>
+  </div>
+</div>
+
+<!-- SOS MODAL -->
+<div class="sos-modal" id="sos-modal">
+  <div class="sos-box">
+    <div class="sos-icon-big">🆘</div>
+    <div class="sos-ttl" id="sos-title">Emergency Contact</div>
+    <div class="sos-subtitle" data-k="sos_subtitle">Activemljet eBike Rental · Polače</div>
+
+    <div class="sos-hours">
+      🕐 <span data-k="sos_hours">Working hours: every day 9:00 – 19:00</span>
+    </div>
+
+    <div class="sos-coords" id="sos-coords">📡 GPS: locating...
+NP Mljet, Croatia</div>
+
+    <div class="sos-contact-name">👤 <span data-k="sos_owner">Owner</span> · +385 98 608 861</div>
+    <div class="sos-actions">
+      <button class="sos-act sos-act-call" data-phone="1" data-mode="call">
+        <span class="sos-act-ico">📞</span>
+        <span class="sos-act-txt" data-k="sos_call">Call</span>
+      </button>
+      <button class="sos-act sos-act-wa" data-phone="1" data-mode="whatsapp">
+        <span class="sos-act-ico">💬</span>
+        <span class="sos-act-txt">WhatsApp</span>
+      </button>
+    </div>
+
+    <div class="sos-contact-name" style="margin-top:14px">👤 <span data-k="sos_staff">Staff</span> · +385 99 608 8611</div>
+    <div class="sos-actions">
+      <button class="sos-act sos-act-call" data-phone="2" data-mode="call">
+        <span class="sos-act-ico">📞</span>
+        <span class="sos-act-txt" data-k="sos_call">Call</span>
+      </button>
+      <button class="sos-act sos-act-wa" data-phone="2" data-mode="whatsapp">
+        <span class="sos-act-ico">💬</span>
+        <span class="sos-act-txt">WhatsApp</span>
+      </button>
+    </div>
+
+    <div class="sos-info" data-k="sos_info">⚠️ Both numbers are available for bike rental, tours and help. Tap Call or WhatsApp to contact directly. Your GPS location will be included in WhatsApp messages.</div>
+
+    <button class="sos-cancel" id="sos-cancel">✕ <span data-k="sos_close">Close</span></button>
+  </div>
+</div>
+
+<!-- SOS CONFIRM MODAL -->
+<div class="sos-modal" id="sos-confirm">
+  <div class="sos-box sos-box-confirm">
+    <div class="sos-icon-big" id="sos-confirm-ico">📞</div>
+    <div class="sos-ttl" id="sos-confirm-title">Call?</div>
+    <div class="sos-confirm-text" id="sos-confirm-text">You are about to call</div>
+    <div class="sos-actions">
+      <button class="sos-act sos-act-cancel" id="sos-confirm-cancel">
+        <span class="sos-act-ico">✕</span>
+        <span class="sos-act-txt" data-k="sos_cancel">Cancel</span>
+      </button>
+      <button class="sos-act sos-act-confirm" id="sos-confirm-yes">
+        <span class="sos-act-ico" id="sos-confirm-yes-ico">📞</span>
+        <span class="sos-act-txt" data-k="sos_confirm">Confirm</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-ico" id="t-ico">📍</div>
+  <div>
+    <div class="toast-ttl" id="t-ttl">Checkpoint!</div>
+    <div class="toast-txt" id="t-txt">You've arrived.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="hdr">
+    <div class="hdr-r1">
+      <div class="h-logo" id="h-logo-btn" style="cursor:pointer" title="Back to home"><span class="l-hash">#</span><span class="l-act">act</span><span class="l-ive">ive</span><span class="l-m">m</span><span class="l-ljet">ljet</span></div>
+      <div class="h-right">
+        <div class="h-lang">
+          <select class="lang-select-mini" id="header-lang-select">
+            <option value="en">🇬🇧 EN</option>
+            <option value="hr">🇭🇷 HR</option>
+            <option value="sl">🇸🇮 SL</option>
+            <option value="de">🇩🇪 DE</option>
+            <option value="it">🇮🇹 IT</option>
+            <option value="es">🇪🇸 ES</option>
+            <option value="fr">🇫🇷 FR</option>
+          </select>
+        </div>
+        <div class="gps-pill"><div class="gdot" id="gdot"></div><span id="g-lbl">GPS off</span></div>
+        <button class="sos-btn" id="sos-open">🆘 SOS</button>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab on" data-panel="tracker"><span class="ti">🗺️</span><span data-k="t_track">Tracker</span></button>
+      <button class="tab" data-panel="guide"><span class="ti">📍</span><span data-k="t_guide">Guide</span></button>
+      <button class="tab" data-panel="tours"><span class="ti">🚵</span><span data-k="t_tours">Tours</span></button>
+      <button class="tab" data-panel="nature"><span class="ti">🌿</span><span data-k="t_nature">Nature</span></button>
+      <button class="tab" data-panel="stats"><span class="ti">📊</span><span data-k="t_stats">Stats</span></button>
+    </div>
+  </div>
+
+  <div class="panels">
+
+    <!-- TRACKER -->
+    <div class="panel on" id="panel-tracker">
+      <div class="wip-banner"><span data-k="wip_label">⚠️ UNDER CONSTRUCTION</span></div>
+      <div class="map-wrap">
+        <div class="wx">
+          <div class="wx-t" id="wx-t">--°C</div>
+          <div class="wx-r">💨 <span id="wx-w">--</span></div>
+          <div class="wx-r">☁️ <span id="wx-u">--</span></div>
+          <div class="wx-b" id="wx-b">⏳ Loading...</div>
+        </div>
+        <!-- Google Maps satellite view of Polače Activemljet -->
+        <iframe id="gmap" class="gmap-iframe"
+          src="https://maps.google.com/maps?q=Activemljet+E-bike+rental+Pola%C4%8De+Mljet&ll=42.78608,17.3781&z=17&t=k&hl=en&output=embed"
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <button class="map-earth-btn" id="map-earth-btn" title="Open in Google Earth">
+          🌍 <span data-k="map_earth">Google Earth</span>
+        </button>
+        <div class="map-ribbon">
+          <button class="hq-btn" id="hq-btn" data-k="map_back_hq">🏛️ Activemljet HQ</button>
+          <button class="gpscentr-btn" id="gps-centr-btn" data-k="map_my_location">📍 My location</button>
+        </div>
+      </div>
+
+      <div class="sbar">
+        <div class="sc"><div class="sc-v" id="v-spd">0.0</div><div class="sc-l">km/h</div></div>
+        <div class="sc"><div class="sc-v" id="v-dst">0.0</div><div class="sc-l">km</div></div>
+        <div class="sc"><div class="sc-v" id="v-tim">00:00</div><div class="sc-l" data-k="l_time">time</div></div>
+        <div class="sc"><div class="sc-v" id="v-cps">0/6</div><div class="sc-l" data-k="l_stops">stops</div></div>
+        <div class="sc"><div class="sc-v" id="v-bat" style="color:#52B788">100%</div><div class="sc-l">🔋</div></div>
+      </div>
+
+      <div class="prog-wrap">
+        <div class="prog-row"><span data-k="l_progress">Tour progress</span><span id="prog-pct">0%</span></div>
+        <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+      </div>
+
+      <div id="cp-alert-wrap" style="display:none">
+        <div class="cp-al">
+          <div class="cp-al-ico" id="ca-ico">📍</div>
+          <div>
+            <div class="cp-al-ttl" id="ca-ttl">Stop</div>
+            <div class="cp-al-txt" id="ca-txt">Open Guide tab</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ctrl">
+        <button class="btn btn-go" id="btn-go">🚴 Start eBike Tour</button>
+        <div class="ctrl-row" id="ctrl-active" style="display:none">
+          <button class="btn btn-pause" id="btn-pause">⏸ Pause</button>
+          <button class="btn btn-end" id="btn-end">⏹ End Tour</button>
+        </div>
+        <button class="btn btn-map" id="btn-map">🗺️ Open in Google Maps</button>
+      </div>
+
+      <div class="elev-wrap">
+        <div class="elev-title" data-k="l_elev">🏔 ELEVATION PROFILE · ~12 km</div>
+        <svg class="elev-svg" viewBox="0 0 350 56" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="eg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#52B788" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#52B788" stop-opacity="0.03"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,51 L0,36 Q20,31 38,34 Q68,26 100,14 Q130,5 155,11 Q180,16 200,26 Q220,31 250,23 Q280,14 300,16 Q320,14 350,19 L350,51Z" fill="url(#eg)"/>
+          <path d="M0,36 Q20,31 38,34 Q68,26 100,14 Q130,5 155,11 Q180,16 200,26 Q220,31 250,23 Q280,14 300,16 Q320,14 350,19" stroke="#52B788" stroke-width="1.8" fill="none"/>
+          <circle cx="0" cy="36" r="4" fill="#E05A3A"/>
+          <circle cx="113" cy="12" r="4" fill="#0096C7"/>
+          <circle cx="155" cy="11" r="4" fill="#C5A03E"/>
+          <circle cx="202" cy="26" r="4" fill="#0096C7"/>
+          <circle cx="258" cy="23" r="4" fill="#52B788"/>
+          <circle cx="350" cy="19" r="4" fill="#9B7FE0"/>
+          <text x="3" y="54" fill="rgba(255,255,255,0.28)" font-size="6.5" font-family="monospace">0m</text>
+          <text x="292" y="54" fill="rgba(255,255,255,0.28)" font-size="6.5" font-family="monospace">253m</text>
+          <circle id="elev-ind" cx="0" cy="36" r="5" fill="#fff" stroke="#00B4D8" stroke-width="2" style="display:none"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- GUIDE -->
+    <div class="panel" id="panel-guide">
+      <div class="sec-h" data-k="l_guide_h">🚴 EBIKE TOUR · STOP GUIDE</div>
+      <div id="guide-list"></div>
+    </div>
+
+    <!-- TOURS -->
+    <div class="panel" id="panel-tours">
+      <div class="tours-hero">
+        <div class="th-ttl" data-k="l_tours_ttl">eBike Adventures</div>
+        <div class="th-sub" data-k="l_tours_subhero">National Park Mljet · 4 Routes</div>
+      </div>
+      <div class="sec-h" style="padding-top:13px" data-k="l_tours_pick">Choose Your Route</div>
+      <div id="tours-list"></div>
+    </div>
+
+    <!-- NATURE -->
+    <div class="panel" id="panel-nature">
+      <div class="nat-hero">
+        <div class="nh-ttl" data-k="l_nat_title">Island of Mljet</div>
+        <div class="nh-sub" data-k="l_nat_sub">National Park · Adriatic Sea · Croatia</div>
+      </div>
+      <div class="sec-h" style="padding-top:13px" data-k="l_safety">⚠️ Safety & Essential Tips</div>
+      <div class="warn water">
+        <div class="warn-ico">💧</div>
+        <div>
+          <div class="warn-ttl" data-k="l_water_t">Water Warning — Carry 2L Minimum</div>
+          <div class="warn-txt" data-k="l_water_x">No drinking water sources on the lake cycling route. Bring at least 2 litres per person. Refill only at Pomena (Hotel Odysseus) or Polače harbour. Dehydration risk HIGH in summer.</div>
+        </div>
+      </div>
+      <div class="warn heat">
+        <div class="warn-ico">🌡️</div>
+        <div>
+          <div class="warn-ttl" data-k="l_heat_t">Heat Warning — Goveđari Interior</div>
+          <div class="warn-txt" data-k="l_heat_x">The interior around Goveđari has NO sea breeze. Temperatures regularly exceed 38°C with high humidity. Ride before 10:00 or after 17:00. Heat stroke: dizziness, nausea, confusion.</div>
+        </div>
+      </div>
+      <div class="sec-h" data-k="l_lakes">The Lakes</div>
+      <div class="stat-grid">
+        <div class="sg"><div class="sg-v">145 ha</div><div class="sg-l">Veliko jezero</div></div>
+        <div class="sg"><div class="sg-v">24 ha</div><div class="sg-l">Malo jezero</div></div>
+        <div class="sg"><div class="sg-v">47 m</div><div class="sg-l" data-k="l_depth">Max depth</div></div>
+        <div class="sg"><div class="sg-v">90%</div><div class="sg-l" data-k="l_forest">Forest cover</div></div>
+      </div>
+      <div class="sec-h" data-k="l_species">Protected Marine Species</div>
+      <div class="n-card">
+        <ul class="sp-ul">
+          <li class="sp-li"><span class="sp-ico">🪼</span><div><div class="sp-n" data-k="sp1">Endemic Jellyfish — found nowhere else on Earth</div><div class="sp-s">Aurelia relicta · up to 55 cm · <span data-k="sp1s">harmless to swimmers</span></div></div></li>
+          <li class="sp-li"><span class="sp-ico">🪸</span><div><div class="sp-n" data-k="sp2">World's Largest Bushy Coral Reef</div><div class="sp-s">Cladocora caespitosa · 650 m² · <span data-k="sp2s">depth 4–18 m</span></div></div></li>
+          <li class="sp-li"><span class="sp-ico">🦪</span><div><div class="sp-n" data-k="sp3">Noble Pen Shell ⛔ STRICTLY PROTECTED</div><div class="sp-s">Pinna nobilis · <span data-k="sp3s">up to 1 m · largest bivalve in Adriatic</span></div></div></li>
+          <li class="sp-li"><span class="sp-ico">🐚</span><div><div class="sp-n" data-k="sp4">Scallop — largest Adriatic population in Malo jezero</div><div class="sp-s">Pecten jacobaeus · 8–15 cm</div></div></li>
+          <li class="sp-li"><span class="sp-ico">🪨</span><div><div class="sp-n" data-k="sp5">Date Mussel ⛔ STRICTLY PROTECTED</div><div class="sp-s">Litophaga litophaga · <span data-k="sp5s">lives ~80 years</span></div></div></li>
+        </ul>
+      </div>
+      <div class="sec-h" data-k="l_veg">Forest Vegetation</div>
+      <div class="n-card">
+        <div class="n-ttl" data-k="l_pine_t">🌲 Aleppo Pine</div>
+        <p data-k="l_pine">Dominant tree covering most of the park. Brought to Mljet by the ancient Greeks. Bluish-green needles 6–10 cm, grows to 20 m. Dense around both lake shores.</p>
+        <div class="tags" style="margin-top:8px"><span class="tag g">Pinus halepensis</span><span class="tag" data-k="l_greek">Greek heritage</span></div>
+      </div>
+      <div class="n-card">
+        <div class="n-ttl" data-k="l_oak_t">🌳 Holly Oak (Holm Oak)</div>
+        <p data-k="l_oak">Evergreen oak with broad spherical crown, dark grey cracked bark, leathery leaves to 7 cm. Produces acorns. Key areas: Velika dolina, Valakija, Planjak, Knežepolje.</p>
+        <div class="tags" style="margin-top:8px"><span class="tag g">Quercus ilex</span></div>
+      </div>
+      <div class="sec-h" data-k="l_hist">Brief History</div>
+      <div class="n-card">
+        <div class="n-ttl" data-k="l_hist_t">From Illyrians to Croatia</div>
+        <p data-k="l_hist_x">Inhabited since the 2nd millennium BC. Romans built the third largest Adriatic palace here. In 1151 Benedictine monks built St. Mary's Monastery. The island passed through Republic of Ragusa, Napoleonic France, Austria-Hungary, Italy, Yugoslavia, and became part of Croatia. National Park since 1960.</p>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="panel" id="panel-stats">
+      <div class="wip-banner"><span data-k="wip_label">⚠️ UNDER CONSTRUCTION</span></div>
+      <div class="sec-h" data-k="l_stats_h">Tour Summary</div>
+      <div class="big-grid">
+        <div class="bg-box"><div class="bg-v" id="fs-d">0.0</div><div class="bg-u">km</div><div class="bg-l" data-k="l_dist">Distance</div></div>
+        <div class="bg-box"><div class="bg-v" id="fs-t">0:00</div><div class="bg-l" data-k="l_ridetime">Ride Time</div></div>
+        <div class="bg-box"><div class="bg-v" id="fs-s">0.0</div><div class="bg-u">km/h</div><div class="bg-l" data-k="l_avgspd">Avg Speed</div></div>
+        <div class="bg-box"><div class="bg-v" id="fs-e">0</div><div class="bg-u">m</div><div class="bg-l" data-k="l_elevstat">Elevation</div></div>
+        <div class="bg-box"><div class="bg-v" id="fs-c">0</div><div class="bg-u">kcal</div><div class="bg-l" data-k="l_cal">Calories</div></div>
+        <div class="bg-box"><div class="bg-v" id="fs-m">0.0</div><div class="bg-u">km/h</div><div class="bg-l" data-k="l_max">Max Speed</div></div>
+      </div>
+      <div class="sec-h" data-k="l_visited">Visited Stops</div>
+      <div class="vis-list" id="vis-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════ FULL TRANSLATIONS ═══════════════════════════════════════════
+var TR={
+  en:{
+    splash_btn:"🚴 Start Adventure",
+    pdf_title:"Download PDF Guide",
+    pdf_sub:"Free · 7 languages · 68 pages",
+    t_track:"🚧 Tracker",t_guide:"Guide",t_tours:"Tours",t_nature:"Nature",t_stats:"🚧 Stats",
+    l_time:"time",l_stops:"stops",l_progress:"Tour progress",
+    l_elev:"🏔 ELEVATION PROFILE · ~12 km",
+    l_guide_h:"🚴 EBIKE TOUR · STOP GUIDE",
+    l_tours_ttl:"eBike Adventures", l_tours_subhero:"National Park Mljet · 4 Routes",
+    l_tours_pick:"Choose Your Route", l_tour_btn:"🚴 Start This Tour",
+    l_book_now:"Book Now",
+    l_per_person:"per person",
+    l_book_msg:'Hello Active Mljet! I would like to book the "{tour}" tour. Please send me details.',
+    l_nat_title:"Island of Mljet", l_nat_sub:"National Park · Adriatic Sea · Croatia",
+    l_safety:"⚠️ Safety & Essential Tips",
+    l_water_t:"Water Warning — Carry 2L Minimum",
+    l_water_x:"No drinking water sources on the lake cycling route. Bring at least 2 litres per person. Refill only at Pomena (Hotel Odysseus) or Polače harbour. Dehydration risk HIGH in summer.",
+    l_heat_t:"Heat Warning — Goveđari Interior",
+    l_heat_x:"The interior around Goveđari has NO sea breeze. Temperatures regularly exceed 38°C with high humidity. Ride before 10:00 or after 17:00. Heat stroke signs: dizziness, nausea, confusion.",
+    l_lakes:"The Lakes", l_depth:"Max depth", l_forest:"Forest cover",
+    l_species:"Protected Marine Species",
+    sp1:"Endemic Jellyfish — found nowhere else on Earth", sp1s:"harmless to swimmers",
+    sp2:"World's Largest Bushy Coral Reef", sp2s:"depth 4–18 m",
+    sp3:"Noble Pen Shell ⛔ STRICTLY PROTECTED", sp3s:"up to 1 m · largest bivalve in Adriatic",
+    sp4:"Scallop — largest Adriatic population in Malo jezero",
+    sp5:"Date Mussel ⛔ STRICTLY PROTECTED", sp5s:"lives ~80 years",
+    l_veg:"Forest Vegetation", l_greek:"Greek heritage",
+    l_pine_t:"🌲 Aleppo Pine",
+    l_pine:"Dominant tree covering most of the park. Brought to Mljet by the ancient Greeks. Bluish-green needles 6–10 cm, grows to 20 m. Dense around both lake shores.",
+    l_oak_t:"🌳 Holly Oak (Holm Oak)",
+    l_oak:"Evergreen oak with broad spherical crown, dark grey cracked bark, leathery leaves to 7 cm. Produces acorns. Key areas: Velika dolina, Valakija, Planjak, Knežepolje.",
+    l_hist:"Brief History", l_hist_t:"From Illyrians to Croatia",
+    l_hist_x:"Inhabited since the 2nd millennium BC. Romans built the third largest Adriatic palace here. In 1151 Benedictine monks built St. Mary's Monastery. The island passed through Republic of Ragusa, Napoleonic France, Austria-Hungary, Italy, Yugoslavia, and became part of Croatia. National Park since 1960.",
+    l_stats_h:"Tour Summary", l_dist:"Distance", l_ridetime:"Ride Time",
+    l_avgspd:"Avg Speed", l_elevstat:"Elevation", l_cal:"Calories", l_max:"Max Speed",
+    l_visited:"Visited Stops",
+    gps_on:"GPS active", gps_off:"GPS off",
+    btn_start:"🚴 Start eBike Tour", btn_pause:"⏸ Pause", btn_resume:"▶ Resume", btn_end:"⏹ End Tour",
+    btn_map:"🗺️ Open in Google Maps",
+    map_my_location:"📍 My location",
+    map_earth:"Google Earth",
+    map_back_hq:"🏛️ Activemljet HQ",
+    map_you:"YOU",
+    wip_label:"🚧",
+    map_pin_label:"📍 Activemljet eBike Rental · Polače",
+    toast_start:"Tour started!", toast_start_x:"GPS active. Enjoy your ride!",
+    toast_end:"Tour complete!", alert_hint:"— open Guide tab for details",
+    sos_title:"Emergency Contact",
+    sos_subtitle:"Activemljet eBike Rental · Polače",
+    sos_owner:"Owner",
+    sos_staff:"Staff",
+    sos_hours:"Working hours: every day 9:00 – 19:00",
+    sos_call:"Call",
+    sos_close:"Close",
+    sos_cancel:"Cancel",
+    sos_confirm:"Confirm",
+    sos_info:"⚠️ Both numbers are available for bike rental, tours and help. Tap Call or WhatsApp to contact directly. Your GPS location will be included in WhatsApp messages.",
+    sos_gps_locating:"locating...",
+    sos_confirm_call_title:"Call owner?",
+    sos_confirm_call_text:"You are about to call:",
+    sos_confirm_wa_title:"Open WhatsApp?",
+    sos_confirm_wa_text:"You are about to send a WhatsApp message to:",
+    sos_wa_msg:"🆘 Hello, I need help — I am cycling on Mljet and need assistance from Activemljet.",
+    wx_loading:"⏳ Loading weather...",
+    wx_offline:"📡 No internet",
+    wx_extreme_heat:"🌡️ EXTREME HEAT",
+    wx_heat_risk:"⚠️ HEAT RISK",
+    wx_drink_water:"💧 DRINK WATER",
+    wx_strong_wind:"💨 STRONG WIND",
+    wx_rain:"🌧 RAIN — CHECK FORECAST",
+    wx_good:"✅ GOOD CONDITIONS",
+    wx_cold:"🧥 BUNDLE UP",
+    wx_feels:"feels",
+    toast_locating:"Locating you...",
+    toast_gps_searching:"Searching... move outside",
+    toast_gps_open_maps:"Opening Google Maps for location...",
+    gps_help_close:"Got it",
+    gps_help_denied_title:"Location Permission Denied",
+    gps_help_denied_body:"Your browser is blocking location access for this page.<br><br><strong>To fix it:</strong><ol><li>Tap the <strong>🔒 lock icon</strong> in the address bar</li><li>Tap <strong>Permissions</strong></li><li>Allow <strong>Location</strong></li><li>Reload the page</li></ol>Also make sure <strong>Location Services</strong> are enabled in your phone settings.",
+    gps_help_unavail_title:"GPS Signal Unavailable",
+    gps_help_unavail_body:"Your device cannot get a GPS signal right now.<br><br><strong>Try this:</strong><ol><li>Move outdoors with a clear sky view</li><li>Wait 10–30 seconds for GPS to lock on</li><li>Make sure airplane mode is off</li></ol>",
+    gps_help_timeout_title:"GPS Took Too Long",
+    gps_help_timeout_body:"GPS is taking too long to respond.<br><br>Try moving outside, away from buildings, and try again. GPS works best with a clear view of the sky.",
+    gps_help_unsup_title:"GPS Not Supported",
+    gps_help_unsup_body:"Your browser does not support location services. Please try using Chrome, Safari, or Firefox.",
+    cps:[
+      {short:"Activemljet eBike Rental · Roman Palace & Harbour",
+       desc:"Polače is the oldest settlement on Mljet, dating back to Greek and Illyrian times — and the home base of Activemljet eBike Rental, where your tour begins! Here you can see impressive remains of a Late Antiquity palace from the end of the 5th century AD — the third largest in the Adriatic, after the Arena in Pula and Diocletian's Palace in Split. The harbour is one of the safest on the entire Dalmatian coast.",
+       tips:["🚴 Activemljet eBike rental & tour center","🏛️ Roman ruins along the waterfront","⛵ Views of islets Tajnik and Ovrata","📸 Perfect panorama of the bay","⚓ Underwater shipwreck sites in the bay"],
+       tags:["eBike Rental","Roman Palace","5th c. AD","Illyrians"], hist:"Illyrians · Romans · Greeks · 5th c. AD"},
+      {short:"Tidal Currents & Benedictine Mill",
+       desc:"The gateway between the open sea and Veliko jezero. Before 1958 it was shallower, creating powerful tidal currents reversing every 6 hours. Benedictines built a watermill here in the 16th century. Demolished 1958, rebuilt 2016.",
+       tips:["🌊 Watch the tidal current flow","🏗️ The rebuilt bridge (2016)","🐠 Great marine life observation","🧂 Benedictine salt pan site"],
+       tags:["Benedictine Mill","Tidal current","Bridge 2016"], hist:"Benedictines · demolished 1958 · rebuilt 2016"},
+      {short:"Benedictine Monastery 1177–1198",
+       desc:"On a small islet in Veliko jezero stands the Benedictine monastery with the Church of the Assumption, built 1177–1198. One of Dalmatia's most important cultural centres. Its library was among the richest Benedictine libraries in Dalmatia. Closed by Napoleon 1809, returned 1998.",
+       tips:["⛵ Boat ride to the islet (~5 min)","⛪ Romanesque-Renaissance architecture","📚 One of Dalmatia's richest libraries","🏰 Renaissance defensive tower SE corner"],
+       tags:["1177–1198","Benedictines","Romanesque","Renaissance"], hist:"Pope Innocent III · 1198 · closed 1809 · 1998"},
+      {short:"Salt Channel & Scenic Passage",
+       desc:"A tiny village (~30 residents) founded by the Sršen family in 1825. Named after Benedictine-era salt harvesting. The Soline Channel is the main nautical gateway into Veliko jezero. A short walk leads to a cave with stalactites and stalagmites.",
+       tips:["🧂 Named after Benedictine salt pans","🚤 Scenic Soline Channel views","🦇 Cave with stalactites — 5 min walk","📸 Lake sunset viewpoint"],
+       tags:["Salt harvesting","Founded 1825","Soline Channel","Cave"], hist:"Benedictines · Sršen family · 1825"},
+      {short:"Hotel Odysseus & Fishing Heritage",
+       desc:"The youngest settlement on Mljet, grown from the Goveđari fishing community. Hotel Odysseus (1978) is the only hotel on the island (~320 guests) and the main arrival hub for organised visitors. Nearby are Roman villas (villae rusticae) and underwater amphora sites in the bay.",
+       tips:["🏨 Hotel Odysseus — only hotel on Mljet","🐟 Goveđari fishing tradition","⚓ Underwater amphora sites in the bay","🌅 West-facing sunset viewpoint"],
+       tags:["Hotel Odysseus 1978","Fishing co-op","Roman villas"], hist:"Goveđari community · Hotel 1978"},
+      {short:"Ethnographic Village & Pine Forests",
+       desc:"The oldest and best-preserved village on Mljet, officially an ethnographic village. First mentioned 8 April 1793 in a Benedictine settlement agreement. Church of Saint Nicholas built 1927. Surrounded by Aleppo pine and holly oak forests. NOTE: No sea breeze here — very hot midday in summer!",
+       tips:["🌿 Original traditional architecture","⛪ Church of Saint Nicholas (1927)","🚶 Hiking trails in all directions","⚠️ No sea breeze — very hot midday!"],
+       tags:["Ethnographic village","Settlement 1793","Benedictines"], hist:"Settlement 1793 · Parish founded 1897"}
+    ],
+    tours:[
+      {name:"Lake Classic", sub:"Polače → Lake → Polače", dl:"EASY",
+       desc:"The signature ride of NP Mljet. A smooth lakeside path winds around Veliko jezero past the iconic Benedictine monastery on St. Mary's Isle. Perfect for first-timers and families.",
+       stops_list:["🏛️ Polače – Roman palace ruins","🌊 Veliki most – Tidal mill channel","⛪ St. Mary's Isle monastery","🧂 Soline – Salt village & cave","🌿 Goveđari – Ethnographic village","🏛️ Polače – Return"]},
+      {name:"Lake & Pomena", sub:"Polače → Lake → Pomena → Polače", dl:"EASY+",
+       desc:"Combines the lake loop with a coastal extension to Pomena — a charming fishing village with stone houses, harbour cafés, and the only hotel on the island. Lunch break by the sea.",
+       stops_list:["🏛️ Polače – Roman palace start","🌊 Veliki most – Tidal mill","⛪ St. Mary's Isle monastery","🧂 Soline – Salt village","🏨 Pomena – Fishing village & lunch","🌿 Goveđari – Ethnographic village","🏛️ Polače – Return"]},
+      {name:"Odyssey Cave", sub:"Polače → Odyssey Cave → Polače", dl:"MODERATE",
+       desc:"A mythological journey to the legendary cave where Odysseus is said to have rested. Includes a dramatic descent, swim inside the sea cave's turquoise pool, and panoramic ridge views of the Adriatic.",
+       stops_list:["🏛️ Polače – Start","🌄 South ridge viewpoint","⛰️ Coastal panorama","🗿 Odyssey Cave – Swim inside","🏛️ Polače – Return"]},
+      {name:"Saplunara All-Day", sub:"Polače → East Coast → Saplunara → Polače", dl:"EXPERT",
+       desc:"The ultimate Mljet odyssey. Cross the entire island, ride wild eastern coasts, and reach Saplunara — the most beautiful sandy beach in southern Dalmatia. A traditional konoba lunch is included.",
+       stops_list:["🏛️ Polače – Start","🌊 Lake passage","⛪ St. Mary's Isle","🧂 Soline","🌿 Goveđari","⛰️ Montokuc summit","🚢 Sobra – ferry port","🏖️ Saplunara – sandy beach swim","🍽️ Konoba lunch","🏛️ Polače – Return"]}
+    ]
+  },
+
+  hr:{
+    splash_btn:"🚴 Pokreni Avanturu",
+    pdf_title:"Preuzmite PDF Vodič",
+    pdf_sub:"Besplatno · 7 jezika · 68 stranica",
+    t_track:"🚧 Tracker",t_guide:"Vodič",t_tours:"Ture",t_nature:"Priroda",t_stats:"🚧 Stat.",
+    l_time:"vrijeme",l_stops:"postaje",l_progress:"Napredak ture",
+    l_elev:"🏔 PROFIL VISINE · ~12 km",
+    l_guide_h:"🚴 EBIKE TURA · VODIČ POSTAJA",
+    l_tours_ttl:"eBike Avanture", l_tours_subhero:"Nacionalni Park Mljet · 4 Rute",
+    l_tours_pick:"Odaberite Rutu", l_tour_btn:"🚴 Pokreni Ovu Turu",
+    l_book_now:"Rezerviraj",
+    l_per_person:"po osobi",
+    l_book_msg:'Pozdrav Active Mljet! Želim rezervirati turu "{tour}". Molim pošaljite mi detalje.',
+    l_nat_title:"Otok Mljet", l_nat_sub:"Nacionalni Park · Jadransko More · Hrvatska",
+    l_safety:"⚠️ Sigurnost i Važni Savjeti",
+    l_water_t:"Upozorenje: Voda — Min. 2L po osobi",
+    l_water_x:"Na ruti oko jezera NEMA pitke vode. Ponesite najmanje 2 litre po osobi. Punjenje samo u Pomeni (Hotel Odisej) ili u luci Polače. Rizik dehidracije VISOK ljeti.",
+    l_heat_t:"Upozorenje: Vrućina — Unutrašnjost",
+    l_heat_x:"Unutrašnjost oko Goveđara NEMA morskog povjetarca. Temperature redovito prelaze 38°C uz visoku vlažnost. Vozite prije 10h ili poslije 17h. Znakovi toplinskog udara: vrtoglavica, mučnina, zbunjenost.",
+    l_lakes:"Jezera", l_depth:"Maks. dubina", l_forest:"Šumska površina",
+    l_species:"Zaštićene Morske Vrste",
+    sp1:"Endemska meduza — nigdje drugdje na svijetu", sp1s:"bezopasna za kupače",
+    sp2:"Najveći greben kamenog koralja na svijetu", sp2s:"dubina 4–18 m",
+    sp3:"Plemenita periska ⛔ STROGO ZAŠTIĆENA", sp3s:"do 1 m · najveći školjkaš Jadrana",
+    sp4:"Jakobova kapica — najveća jadranska populacija u Malom jezeru",
+    sp5:"Prstac ⛔ STROGO ZAŠTIĆENA VRSTA", sp5s:"živi ~80 godina",
+    l_veg:"Šumska Vegetacija", l_greek:"Grčka baština",
+    l_pine_t:"🌲 Alepski Bor",
+    l_pine:"Dominantno stablo parka koje pokriva većinu otoka. Doneseno na Mljet u antičko doba od strane Grka. Plavičastozelene iglice 6–10 cm, raste do 20 m visine. Gusto raste oko obala oba jezera.",
+    l_oak_t:"🌳 Hrast Česvina (Crnika)",
+    l_oak:"Zimzeleni hrast široke i okrugle krošnje, tamnosive ispucane kore i kožastih tamnozelenih listova do 7 cm. Rodi žirom. Važna staništa: Velika dolina, Valakija, Planjak, Knežepolje.",
+    l_hist:"Kratka Povijest", l_hist_t:"Od Ilira do Hrvatske",
+    l_hist_x:"Mljet je nastanjen od 2. tisućljeća pr. Kr. (Iliri). Rimljani su ovdje sagradili treću najveću palaču na Jadranu. Godine 1151. benediktinci grade samostan sv. Marije. Otok je prošao kroz Dubrovačku Republiku, Napoleona, Austro-Ugarsku, Italiju i Jugoslaviju, te postao dio Hrvatske. Nacionalni park od 1960.",
+    l_stats_h:"Pregled Ture", l_dist:"Udaljenost", l_ridetime:"Vrijeme Vožnje",
+    l_avgspd:"Prosj. Brzina", l_elevstat:"Uspon", l_cal:"Kalorije", l_max:"Maks. Brzina",
+    l_visited:"Posjećene Postaje",
+    gps_on:"GPS aktivan", gps_off:"GPS isključen",
+    btn_start:"🚴 Pokreni eBike Turu", btn_pause:"⏸ Pauza", btn_resume:"▶ Nastavi", btn_end:"⏹ Završi Turu",
+    btn_map:"🗺️ Otvori u Google Maps",
+    map_my_location:"📍 Moja lokacija",
+    map_earth:"Google Earth",
+    map_back_hq:"🏛️ Activemljet HQ",
+    map_you:"VI",
+    wip_label:"🚧",
+    toast_start:"Tura pokrenuta!", toast_start_x:"GPS praćenje aktivno. Uživajte u vožnji!",
+    toast_end:"Tura završena!", alert_hint:"— otvorite Vodič za detalje",
+    sos_title:"Kontakt u nuždi",
+    sos_subtitle:"Activemljet najam eBike · Polače",
+    sos_owner:"Vlasnik",
+    sos_staff:"Osoblje",
+    sos_hours:"Radno vrijeme: svaki dan 9:00 – 19:00",
+    sos_call:"Pozovi",
+    sos_close:"Zatvori",
+    sos_cancel:"Otkaži",
+    sos_confirm:"Potvrdi",
+    sos_info:"⚠️ Oba broja dostupna su za najam bicikala, ture i pomoć. Pritisnite Pozovi ili WhatsApp za izravan kontakt. Vaša GPS lokacija bit će uključena u WhatsApp poruke.",
+    sos_gps_locating:"lociranje...",
+    sos_confirm_call_title:"Nazvati vlasnika?",
+    sos_confirm_call_text:"Spremate se nazvati:",
+    sos_confirm_wa_title:"Otvoriti WhatsApp?",
+    sos_confirm_wa_text:"Spremate se poslati WhatsApp poruku na:",
+    sos_wa_msg:"🆘 Pozdrav, trebam pomoć — vozim bicikl na Mljetu i trebam pomoć Activemljeta.",
+    wx_loading:"⏳ Učitavanje vremena...",
+    wx_offline:"📡 Nema interneta",
+    wx_extreme_heat:"🌡️ EKSTREMNA VRUĆINA",
+    wx_heat_risk:"⚠️ RIZIK VRUĆINE",
+    wx_drink_water:"💧 PIJTE VODU",
+    wx_strong_wind:"💨 JAK VJETAR",
+    wx_rain:"🌧 KIŠA — PROVJERITE PROGNOZU",
+    wx_good:"✅ DOBRI UVJETI",
+    wx_cold:"🧥 OBUCITE SE",
+    wx_feels:"osjet",
+    toast_locating:"Lociranje...",
+    toast_gps_searching:"Tražim... izađite van",
+    toast_gps_open_maps:"Otvaram Google Maps za lokaciju...",
+    gps_help_close:"U redu",
+    gps_help_denied_title:"Pristup lokaciji odbijen",
+    gps_help_denied_body:"Vaš preglednik blokira pristup lokaciji za ovu stranicu.<br><br><strong>Kako popraviti:</strong><ol><li>Pritisnite <strong>🔒 ikonu lokota</strong> u adresnoj traci</li><li>Pritisnite <strong>Dozvole</strong></li><li>Dozvolite <strong>Lokaciju</strong></li><li>Osvježite stranicu</li></ol>Provjerite i da li su <strong>Usluge lokacije</strong> uključene u postavkama telefona.",
+    gps_help_unavail_title:"GPS signal nedostupan",
+    gps_help_unavail_body:"Vaš uređaj trenutno ne može dobiti GPS signal.<br><br><strong>Pokušajte ovo:</strong><ol><li>Izađite na otvoreno s pogledom na nebo</li><li>Pričekajte 10–30 sekundi da GPS uhvati signal</li><li>Provjerite da je avionski način isključen</li></ol>",
+    gps_help_timeout_title:"GPS predugo traje",
+    gps_help_timeout_body:"GPS predugo odgovara.<br><br>Pokušajte se pomaknuti van, daleko od zgrada, i pokušajte ponovno. GPS najbolje radi s otvorenim pogledom na nebo.",
+    gps_help_unsup_title:"GPS nije podržan",
+    gps_help_unsup_body:"Vaš preglednik ne podržava usluge lokacije. Pokušajte s Chromeom, Safarijem ili Firefoxom.",
+    cps:[
+      {short:"Activemljet eBike najam · Rimska palača i luka",
+       desc:"Polače je najstarije naselje na Mljetu koje seže do grčkog i ilirskog doba — i baza Activemljet eBike najma, odakle vaša tura počinje! Možete vidjeti ostatke kasnoantičke palače s kraja 5. st. n. e. — treće najveće na Jadranu, odmah iza Arene u Puli i Dioklecijanove palače u Splitu. Luka je jedna od najsigurnijih na cijeloj dalmatinskoj obali.",
+       tips:["🚴 Activemljet eBike najam i centar tura","🏛️ Istražite rimske ruševine uz obalu","⛵ Pogled na otočiće Tajnik i Ovrata","📸 Savršena panorama zaljeva","⚓ Hidroarheološka nalazišta brodoloma"],
+       tags:["eBike Najam","Rimska palača","5. st. n. e.","Iliri"], hist:"Iliri · Rimljani · Grci · 5. st. n. e."},
+      {short:"Plimne struje i benediktinski mlin",
+       desc:"Veliki most je prolaz između otvorenog mora i Velikog jezera. Prije 1958. bio je plići i uži, stvarajući snažne plimne struje koje su se mijenjale svakih 6 sati. Benediktinci su ovdje u 16. st. sagradili mlin pokretan tim strujama. Srušen 1958., obnovljen 2016.",
+       tips:["🌊 Promatrajte plimnu struju","🏗️ Obnovljeni most (2016.)","🐠 Odlično za promatranje morskog života","🧂 Mjesto benediktinske solane"],
+       tags:["Benediktinski mlin","Plimna struja","Most 2016."], hist:"Benediktinci · srušen 1958. · obnovljen 2016."},
+      {short:"Benediktinski samostan 1177.–1198.",
+       desc:"Na otočiću usred Velikog jezera nalazi se benediktinski samostan s crkvom Uznesenja Blažene Djevice Marije, izgrađen između 1177. i 1198. Bio je jedno od najvažnijih kulturnih središta Dalmacije. Knjižnica samostana bila je jedna od najbogatijih benediktinskih opatija. Zatvoren za Napoleona 1809., vraćen 1998.",
+       tips:["⛵ Vožnja brodom na otočić (~5 min)","⛪ Romaničko-renesansna arhitektura","📚 Jedna od najbogatijih knjižnica Dalmacije","🏰 Obrambeni toranj iz renesanse"],
+       tags:["1177.–1198.","Benediktinci","Romanika","Renesansa"], hist:"Papa Inocent III. · 1198. · zatvoreno 1809. · 1998."},
+      {short:"Solanski kanal i slikovit prolaz",
+       desc:"Maleno naselje (oko 30 stanovnika) koje je 1825. osnovala obitelj Sršen. Ime potječe iz benediktinskog doba kada se ovdje skupljala sol. Solinski kanal je glavni nautički ulaz u Veliko jezero. Kratkim putem od ceste dolazite do špilje sa stalaktitima i stalagmitima.",
+       tips:["🧂 Naziv potječe od benediktinskih solana","🚤 Pogledi na Solinski kanal","🦇 Špilja sa stalaktitima — 5 min hoda","📸 Pogled na jezero pri zalasku"],
+       tags:["Skupljanje soli","Osnovano 1825.","Solinski kanal","Špilja"], hist:"Benediktinci · obitelj Sršen · 1825."},
+      {short:"Hotel Odisej i ribarska tradicija",
+       desc:"Pomena je najmlađe naselje na Mljetu, nastalo iz ribarske zajednice Goveđara. Hotel Odisej (1978.) jedini je hotel na otoku (oko 320 gostiju) i glavno mjesto dolaska za organizirane posjetitelje. U okolici su antičke rimske vile i podmorska nalazišta amfora u zaljevu.",
+       tips:["🏨 Hotel Odisej — jedini na Mljetu","🐟 Ribarska tradicija Goveđara","⚓ Podmorska nalazišta amfora","🌅 Idealna točka za zalazak sunca"],
+       tags:["Hotel Odisej 1978.","Ribarska zadruga","Rimske vile"], hist:"Ribarska zajednica Goveđari · Hotel 1978."},
+      {short:"Etnoselo i borove šume",
+       desc:"Najstarije i najočuvanije selo na Mljetu, službeno proglašeno etnoselom. Prvi put se spominje 8. travnja 1793. u ugovoru o naseobi između benediktinaca i triju obitelji. Crkva sv. Nikole izgrađena 1927. Selo okružuju šume alepskog bora i hrasta crnike. NAPOMENA: nema morskog povjetarca — vrlo vruće u podne!",
+       tips:["🌿 Originalna tradicijska arhitektura","⛪ Crkva sv. Nikole (1927.)","🚶 Planinarske staze u svim smjerovima","⚠️ Bez morskog povjetarca — vruće u podne!"],
+       tags:["Etnoselo","Naseobu 1793.","Benediktinci"], hist:"Naseobu 1793. · Župa osnovana 1897."}
+    ],
+    tours:[
+      {name:"Lake Classic", sub:"Polače → Jezero → Polače", dl:"LAKO",
+       desc:"Klasična tura NP Mljet. Glatka staza ob jezeru vodi oko Velikog jezera mimo ikoničnog benediktinskog samostana na otočiću sv. Marije. Idealno za početnike i obitelji.",
+       stops_list:["🏛️ Polače – Rimska palača","🌊 Veliki most – Plimni mlin","⛪ Otočić sv. Marije – samostan","🧂 Soline – Solansko naselje","🌿 Goveđari – Etnoselo","🏛️ Polače – Povratak"]},
+      {name:"Lake & Pomena", sub:"Polače → Jezero → Pomena → Polače", dl:"LAKO+",
+       desc:"Spaja krug oko jezera s obalnim produžetkom do Pomene — šarmantne ribarske vasice s kamenim kućama, lučkim kafićima i jedinim hotelom na otoku. Pauza za ručak uz more.",
+       stops_list:["🏛️ Polače – Start","🌊 Veliki most – Plimni mlin","⛪ Otočić sv. Marije","🧂 Soline – Solansko naselje","🏨 Pomena – Ribarska vasica & ručak","🌿 Goveđari – Etnoselo","🏛️ Polače – Povratak"]},
+      {name:"Odisejeva Špilja", sub:"Polače → Odisejeva špilja → Polače", dl:"SREDNJE",
+       desc:"Mitološko putovanje do legendarne špilje gdje se navodno odmarao Odisej. Uključuje dramatičan spust, kupanje u tirkiznom bazenu morske špilje i panoramske poglede s grebena Jadrana.",
+       stops_list:["🏛️ Polače – Start","🌄 Vidikovac južni greben","⛰️ Obalna panorama","🗿 Odisejeva špilja – Kupanje","🏛️ Polače – Povratak"]},
+      {name:"Saplunara Cijeli Dan", sub:"Polače → Istočna obala → Saplunara → Polače", dl:"EKSPERT",
+       desc:"Vrhunska Mljetska odiseja. Prijeđite cijeli otok, vozite se divljim istočnim obalama i stignite do Saplunare — najljepše pješčane plaže južne Dalmacije. Uključen je tradicionalni ručak u konobi.",
+       stops_list:["🏛️ Polače – Start","🌊 Prolaz pored jezera","⛪ Otočić sv. Marije","🧂 Soline","🌿 Goveđari","⛰️ Vrh Montokuc","🚢 Sobra – trajektna luka","🏖️ Saplunara – pješčana plaža","🍽️ Konoba ručak","🏛️ Polače – Povratak"]}
+    ]
+  },
+
+  sl:{
+    splash_btn:"🚴 Začni Pustolovščino",
+    pdf_title:"Prenesite PDF Vodnik",
+    pdf_sub:"Brezplačno · 7 jezikov · 68 strani",
+    t_track:"🚧 Sledilnik",t_guide:"Vodič",t_tours:"Ture",t_nature:"Narava",t_stats:"🚧 Stat.",
+    l_time:"čas",l_stops:"postaje",l_progress:"Napredek ture",
+    l_elev:"🏔 VIŠINSKI PROFIL · ~12 km",
+    l_guide_h:"🚴 EBIKE TURA · VODIČ POSTAJ",
+    l_tours_ttl:"eBike Pustolovine", l_tours_subhero:"Narodni Park Mljet · 4 Trase",
+    l_tours_pick:"Izberi Turo", l_tour_btn:"🚴 Začni To Turo",
+    l_book_now:"Rezerviraj",
+    l_per_person:"na osebo",
+    l_book_msg:'Pozdravljeni Active Mljet! Rad bi rezerviral turo "{tour}". Prosim, pošljite mi podrobnosti.',
+    l_nat_title:"Otok Mljet", l_nat_sub:"Narodni Park · Jadransko Morje · Hrvaška",
+    l_safety:"⚠️ Varnost in Pomembni Nasveti",
+    l_water_t:"Opozorilo: Voda — Vsaj 2L na osebo",
+    l_water_x:"Na kolesarski poti ob jezeru NI pitne vode. Vzemite vsaj 2 litra na osebo. Polnjenje samo v Pomeni (Hotel Odisej) ali pristanišču Polače. Tveganje dehidracije VISOKO poleti.",
+    l_heat_t:"Opozorilo: Vročina — Notranjost otoka",
+    l_heat_x:"Notranjost okrog vasi Goveđari NIMA morskega vetra. Temperature redno presegajo 38°C ob visoki vlažnosti. Kolesarite pred 10h ali po 17h. Znaki vročinske kapi: omotica, slabost, zmedenost.",
+    l_lakes:"Jezera", l_depth:"Maks. globina", l_forest:"Pokritost z gozdom",
+    l_species:"Varovane Morske Vrste",
+    sp1:"Endemska meduza — ni je nikjer drugje na svetu", sp1s:"nenevarna za kopalce",
+    sp2:"Največji greben bušastega koralja na svetu", sp2s:"globina 4–18 m",
+    sp3:"Plemenita periska ⛔ STROGO VAROVANA", sp3s:"do 1 m · največji školjkar Jadrana",
+    sp4:"Jakobova kapica — največja jadranska populacija v Malem jezeru",
+    sp5:"Prstac ⛔ STROGO VAROVANA VRSTA", sp5s:"živi ~80 let",
+    l_veg:"Gozdna Vegetacija", l_greek:"Grška dediščina",
+    l_pine_t:"🌲 Alepski Bor",
+    l_pine:"Prevladujoče drevo v parku, ki pokriva večino otoka. Alepski bor so na Mljet prinesli stari Grki. Iglice so modrikastozelene, dolge 6–10 cm. Zraste do 20 m. Gosto okrog obal obeh jezer.",
+    l_oak_t:"🌳 Hrast Česvina (Crnika)",
+    l_oak:"Zimzeleni hrast s široko in okroglo krošnjo, temno sivim razpokanim lubjem in usnjatimi temnozelenimi listi do 7 cm. Rodi žir. Ključna območja: Velika dolina, Valakija, Planjak, Knežepolje.",
+    l_hist:"Kratka Zgodovina", l_hist_t:"Od Ilirov do Hrvaške",
+    l_hist_x:"Mljet je poseljen od 2. tisočletja pr. n. št. (Iliri). Rimljani so tu zgradili tretjo največjo palačo na Jadranu. Leta 1151 so benediktinci zgradili samostan sv. Marije. Otok je bil del Dubrovniške republike, napoleonske Francije, Avstro-Ogrske, Italije in Jugoslavije, in nato del Hrvaške. Narodni park od leta 1960.",
+    l_stats_h:"Povzetek Ture", l_dist:"Razdalja", l_ridetime:"Čas Vožnje",
+    l_avgspd:"Povp. Hitrost", l_elevstat:"Vzpon", l_cal:"Kalorije", l_max:"Maks. Hitrost",
+    l_visited:"Obiskane Postaje",
+    gps_on:"GPS aktiven", gps_off:"GPS izklopljen",
+    btn_start:"🚴 Začni eBike Turo", btn_pause:"⏸ Premor", btn_resume:"▶ Nadaljuj", btn_end:"⏹ Zaključi Turo",
+    btn_map:"🗺️ Odpri v Google Maps",
+    map_my_location:"📍 Moja lokacija",
+    map_earth:"Google Earth",
+    map_back_hq:"🏛️ Activemljet HQ",
+    map_you:"VI",
+    wip_label:"🚧",
+    toast_start:"Tura začeta!", toast_start_x:"GPS sledenje aktivno. Srečno kolesarjenje!",
+    toast_end:"Tura zaključena!", alert_hint:"— odprite zavihek Vodič za podrobnosti",
+    sos_title:"Nujni stik",
+    sos_subtitle:"Activemljet najem eBike · Polače",
+    sos_owner:"Lastnik",
+    sos_staff:"Osebje",
+    sos_hours:"Delovni čas: vsak dan 9:00 – 19:00",
+    sos_call:"Pokliči",
+    sos_close:"Zapri",
+    sos_cancel:"Prekliči",
+    sos_confirm:"Potrdi",
+    sos_info:"⚠️ Obe številki sta na voljo za najem koles, ture in pomoč. Pritisnite Pokliči ali WhatsApp za neposreden stik. Vaša GPS lokacija bo vključena v WhatsApp sporočila.",
+    sos_gps_locating:"iskanje...",
+    sos_confirm_call_title:"Pokličem lastnika?",
+    sos_confirm_call_text:"Pripravljate se na klic:",
+    sos_confirm_wa_title:"Odprem WhatsApp?",
+    sos_confirm_wa_text:"Pripravljate se poslati WhatsApp sporočilo na:",
+    sos_wa_msg:"🆘 Pozdravljeni, potrebujem pomoč — kolesarim po Mljetu in potrebujem pomoč Activemljeta.",
+    wx_loading:"⏳ Nalaganje vremena...",
+    wx_offline:"📡 Brez interneta",
+    wx_extreme_heat:"🌡️ EKSTREMNA VROČINA",
+    wx_heat_risk:"⚠️ TVEGANJE VROČINE",
+    wx_drink_water:"💧 PIJTE VODO",
+    wx_strong_wind:"💨 MOČAN VETER",
+    wx_rain:"🌧 DEŽ — PREVERITE NAPOVED",
+    wx_good:"✅ DOBRI POGOJI",
+    wx_cold:"🧥 OBLECITE SE",
+    wx_feels:"občutek",
+    toast_locating:"Iskanje lokacije...",
+    toast_gps_searching:"Iščem... pojdite ven",
+    toast_gps_open_maps:"Odpiram Google Maps za lokacijo...",
+    gps_help_close:"V redu",
+    gps_help_denied_title:"Dostop do lokacije zavrnjen",
+    gps_help_denied_body:"Vaš brskalnik blokira dostop do lokacije za to stran.<br><br><strong>Kako popraviti:</strong><ol><li>Pritisnite <strong>🔒 ikono ključavnice</strong> v naslovni vrstici</li><li>Pritisnite <strong>Dovoljenja</strong></li><li>Dovolite <strong>Lokacijo</strong></li><li>Osvežite stran</li></ol>Preverite tudi, ali so <strong>Lokacijske storitve</strong> vklopljene v nastavitvah telefona.",
+    gps_help_unavail_title:"GPS signal ni na voljo",
+    gps_help_unavail_body:"Vaša naprava trenutno ne more pridobiti GPS signala.<br><br><strong>Poskusite to:</strong><ol><li>Pojdite na prosto z odprtim pogledom na nebo</li><li>Počakajte 10–30 sekund, da GPS ujame signal</li><li>Preverite, ali je letalski način izklopljen</li></ol>",
+    gps_help_timeout_title:"GPS predolgo traja",
+    gps_help_timeout_body:"GPS se predolgo odziva.<br><br>Poskusite se premakniti ven, stran od zgradb, in poskusite znova. GPS najbolje deluje z odprtim pogledom na nebo.",
+    gps_help_unsup_title:"GPS ni podprt",
+    gps_help_unsup_body:"Vaš brskalnik ne podpira lokacijskih storitev. Poskusite s Chromom, Safarijem ali Firefoxom.",
+    cps:[
+      {short:"Rimska palača in pristanišče",
+       desc:"Polače je najstarejše naselje na Mljetu, ki sega v grško in ilirsko obdobje. Tu lahko vidite ostanke poznoantične palače s konca 5. stoletja n. št. — tretje največje na Jadranu, takoj za Areno v Puli in Dioklecijanovo palačo v Splitu. Pristanišče je eno najvarnejših na celotni dalmatinski obali.",
+       tips:["🏛️ Rimske ruševine ob obali","⛵ Razgled na otočka Tajnik in Ovrata","📸 Popolna panorama zaliva","⚓ Podmorska najdišča brodolomov"],
+       tags:["Rimska palača","5. st. n. št.","Iliri","Grki"], hist:"Iliri · Rimljani · Grki · 5. st. n. št."},
+      {short:"Plimski tokovi in benediktinski mlin",
+       desc:"Veliki most je prehod med odprtim morjem in Velikim jezerom. Pred letom 1958 je bil plitvejši in ožji, kar je ustvarjalo močne plimske tokove, ki so se obračali vsakih 6 ur. Benediktinci so v 16. stoletju tukaj zgradili mlin, ki so ga poganjali ti tokovi. Porušen leta 1958, obnovljen 2016.",
+       tips:["🌊 Opazujte plimski tok","🏗️ Obnovljen most (2016)","🐠 Odlično za opazovanje morskega življenja","🧂 Mesto benediktinske soline"],
+       tags:["Benediktinski mlin","Plimski tok","Most 2016"], hist:"Benediktinci · porušen 1958 · obnovljen 2016"},
+      {short:"Benediktinski samostan 1177–1198",
+       desc:"Na majhnem otočku sredi Velikega jezera stoji benediktinski samostan s cerkvijo Marijinega vnebovzetja, zgrajen med letoma 1177 in 1198. Bil je eno najpomembnejših kulturnih središč Dalmacije. Njegova knjižnica je bila ena najbogatejših benediktinskih knjižnic v Dalmaciji. Zaprt s strani Napoleona leta 1809, vrnjen 1998.",
+       tips:["⛵ Vožnja s čolnom na otoček (~5 min)","⛪ Romansko-renesančna arhitektura","📚 Ena najbogatejših knjižnic Dalmacije","🏰 Renesančni obrambni stolp"],
+       tags:["1177–1198","Benediktinci","Romanika","Renesansa"], hist:"Papež Inocenc III. · 1198 · zaprt 1809 · 1998"},
+      {short:"Solinski kanal in slikovit prehod",
+       desc:"Majhna vasica (~30 prebivalcev), ki jo je leta 1825 ustanovila družina Sršen. Ime izvira iz benediktinskega časa, ko so tu pridobivali sol. Solinski kanal je glavni nautični vhod v Veliko jezero. Krajši sprehod od ceste vas pripelje do jame s stalaktiti in stalagmiti.",
+       tips:["🧂 Ime po benediktinskih solinah","🚤 Razgled na Solinski kanal","🦇 Jama s stalaktiti — 5 min hoje","📸 Razgled na jezero ob sončnem zahodu"],
+       tags:["Pridobivanje soli","Ustanovljeno 1825","Solinski kanal","Jama"], hist:"Benediktinci · družina Sršen · 1825"},
+      {short:"Hotel Odisej in najem eBike",
+       desc:"Pomena je najmlajše naselje na Mljetu, ki se je razvilo iz ribiške skupnosti Goveđari. Hotel Odisej (1978) je edini hotel na otoku (~320 gostov). Tukaj se nahaja tudi Activemjet eBike najem. V okolici so rimske vile in podmorska najdišča amfor.",
+       tips:["🚴 Activemjet eBike najem tukaj","🏨 Hotel Odisej — edini na Mljetu","⚓ Podmorska najdišča amfor","🌅 Idealna točka za sončni zahod"],
+       tags:["eBike najem","Hotel Odisej 1978","Rimske vile"], hist:"Skupnost Goveđari · Hotel 1978"},
+      {short:"Etnografska vas in borovi gozdovi",
+       desc:"Najstarejša in najbolje ohranjena vas na Mljetu, uradno razglašena za etnografsko vas. Prvič omenjena 8. aprila 1793 v benediktinskem sporazumu o naselitvi. Cerkev sv. Nikolaja zgrajena 1927. Vas obkrožajo gozdovi alepskega bora in hrasta česvine. OPOMBA: ni morskega vetra — zelo vroče opoldan!",
+       tips:["🌿 Originalna tradicionalna arhitektura","⛪ Cerkev sv. Nikolaja (1927)","🚶 Pohodne poti v vse smeri","⚠️ Brez morskega vetra — vroče opoldan!"],
+       tags:["Etnografska vas","Naselitev 1793","Benediktinci"], hist:"Naselitev 1793 · Župnija ustanovljena 1897"}
+    ],
+    tours:[
+      {name:"Lake Classic", sub:"Polače → Jezero → Polače", dl:"LAHKO",
+       desc:"Klasična tura NP Mljet. Gladka pot ob jezeru vodi okoli Velikega jezera mimo ikoničnega benediktinskega samostana na otočku sv. Marije. Idealno za začetnike in družine.",
+       stops_list:["🏛️ Polače – Rimska palača","🌊 Veliki most – Plimski mlin","⛪ Otoček sv. Marije – samostan","🧂 Soline – Slana vas","🌿 Goveđari – Etnografska vas","🏛️ Polače – Vrnitev"]},
+      {name:"Lake & Pomena", sub:"Polače → Jezero → Pomena → Polače", dl:"LAHKO+",
+       desc:"Združuje krog okoli jezera z obalnim podaljškom do Pomene — očarljive ribiške vasice s kamnitimi hišami, lučkimi kavarnami in edinim hotelom na otoku. Postanek za kosilo ob morju.",
+       stops_list:["🏛️ Polače – Start","🌊 Veliki most – Plimski mlin","⛪ Otoček sv. Marije","🧂 Soline – Slana vas","🏨 Pomena – Ribiška vas & kosilo","🌿 Goveđari – Etnografska vas","🏛️ Polače – Vrnitev"]},
+      {name:"Odisejeva Jama", sub:"Polače → Odisejeva jama → Polače", dl:"SREDNJE",
+       desc:"Mitološko potovanje do legendarne jame, kjer naj bi počival Odisej. Vključuje dramatičen spust, kopanje v turkiznem bazenu morske jame in panoramske razglede z grebena Jadrana.",
+       stops_list:["🏛️ Polače – Start","🌄 Razgledna točka južni greben","⛰️ Obalna panorama","🗿 Odisejeva jama – Kopanje","🏛️ Polače – Vrnitev"]},
+      {name:"Saplunara Cel Dan", sub:"Polače → Vzhodna obala → Saplunara → Polače", dl:"EKSPERT",
+       desc:"Vrhunska mljetska odiseja. Prečkajte cel otok, peljite po divjih vzhodnih obalah in se ustavite v Saplunari — najlepši peščeni plaži južne Dalmacije. Vključeno je tradicionalno kosilo v konobi.",
+       stops_list:["🏛️ Polače – Start","🌊 Prehod ob jezeru","⛪ Otoček sv. Marije","🧂 Soline","🌿 Goveđari","⛰️ Vrh Montokuc","🚢 Sobra – trajektna luka","🏖️ Saplunara – peščena plaža","🍽️ Konoba kosilo","🏛️ Polače – Vrnitev"]}
+    ]
+  },
+
+  de:{
+    splash_btn:"🚴 Abenteuer starten",
+    pdf_title:"PDF-Reiseführer herunterladen",
+    pdf_sub:"Kostenlos · 7 Sprachen · 68 Seiten",
+    t_track:"🚧 Tracker",t_guide:"Guide",t_tours:"Touren",t_nature:"Natur",t_stats:"🚧 Stat.",
+    l_time:"Zeit",l_stops:"Stopps",l_progress:"Tour-Fortschritt",
+    l_elev:"🏔 HÖHENPROFIL · ~12 km",
+    l_guide_h:"🚴 EBIKE-TOUR · STATIONEN-GUIDE",
+    l_tours_ttl:"eBike Abenteuer", l_tours_subhero:"Nationalpark Mljet · 4 Routen",
+    l_tours_pick:"Route wählen", l_tour_btn:"🚴 Diese Tour starten",
+    l_book_now:"Buchen",
+    l_per_person:"pro Person",
+    l_book_msg:'Hallo Active Mljet! Ich möchte die Tour "{tour}" buchen. Bitte senden Sie mir Details.',
+    l_nat_title:"Insel Mljet", l_nat_sub:"Nationalpark · Adria · Kroatien",
+    l_safety:"⚠️ Sicherheit & Wichtige Tipps",
+    l_water_t:"Wasserwarnung — mind. 2L pro Person",
+    l_water_x:"Es gibt KEINE Trinkwasserquellen entlang der Seeradroute. Mindestens 2 Liter pro Person mitnehmen. Auffüllen nur in Pomena (Hotel Odysseus) oder im Hafen Polače. Dehydrierungsrisiko im Sommer HOCH.",
+    l_heat_t:"Hitzewarnung — Inselinneres",
+    l_heat_x:"Das Innere rund um Goveđari hat KEINEN Meereswind. Temperaturen übersteigen regelmäßig 38°C bei hoher Luftfeuchtigkeit. Fahren Sie vor 10:00 oder nach 17:00. Hitzeschlag-Symptome: Schwindel, Übelkeit, Verwirrtheit.",
+    l_lakes:"Die Seen", l_depth:"Max. Tiefe", l_forest:"Waldbedeckung",
+    l_species:"Geschützte Meeresarten",
+    sp1:"Endemische Qualle — nirgendwo sonst auf der Welt", sp1s:"harmlos für Schwimmer",
+    sp2:"Größtes Buschkorallen-Riff der Welt", sp2s:"Tiefe 4–18 m",
+    sp3:"Edle Steckmuschel ⛔ STRENG GESCHÜTZT", sp3s:"bis 1 m · größte Muschel der Adria",
+    sp4:"Jakobsmuschel — größte Adriapopulation im Malo jezero",
+    sp5:"Steindattel ⛔ STRENG GESCHÜTZT", sp5s:"lebt ~80 Jahre",
+    l_veg:"Waldvegetation", l_greek:"Griechisches Erbe",
+    l_pine_t:"🌲 Aleppo-Kiefer",
+    l_pine:"Dominierender Baum im Park, der den Großteil der Insel bedeckt. Die Aleppo-Kiefer wurde von den alten Griechen nach Mljet eingeführt. Bläulich-grüne Nadeln 6–10 cm, wird bis 20 m hoch. Dicht rund um beide Seeufer.",
+    l_oak_t:"🌳 Steineiche (Immergrüne Eiche)",
+    l_oak:"Immergrüne Eiche mit breiter Kugelkrone, dunkelgrauer rissiger Borke und lederartigen dunkelgrünen Blättern bis 7 cm. Trägt Eicheln. Wichtige Gebiete: Velika dolina, Valakija, Planjak, Knežepolje.",
+    l_hist:"Kurzgeschichte", l_hist_t:"Von den Illyrern bis Kroatien",
+    l_hist_x:"Mljet ist seit dem 2. Jahrtausend v. Chr. besiedelt (Illyrer). Die Römer bauten hier den drittgrößten Adria-Palast. 1151 gründeten Benediktiner das Kloster St. Maria. Die Insel gehörte zur Republik Ragusa, dann zu napoleonischem Frankreich, Österreich-Ungarn, Italien, Jugoslawien, und schließlich zu Kroatien. Nationalpark seit 1960.",
+    l_stats_h:"Tour-Zusammenfassung", l_dist:"Distanz", l_ridetime:"Fahrzeit",
+    l_avgspd:"Ø Geschw.", l_elevstat:"Höhenmeter", l_cal:"Kalorien", l_max:"Höchstgeschw.",
+    l_visited:"Besuchte Stationen",
+    gps_on:"GPS aktiv", gps_off:"GPS aus",
+    btn_start:"🚴 eBike-Tour starten", btn_pause:"⏸ Pause", btn_resume:"▶ Weiter", btn_end:"⏹ Tour beenden",
+    btn_map:"🗺️ In Google Maps öffnen",
+    map_my_location:"📍 Mein Standort",
+    map_earth:"Google Earth",
+    map_back_hq:"🏛️ Activemljet HQ",
+    map_you:"SIE",
+    wip_label:"🚧",
+    map_pin_label:"📍 Activemljet eBike-Verleih · Polače",
+    toast_start:"Tour gestartet!", toast_start_x:"GPS-Tracking aktiv. Viel Spaß bei der Tour!",
+    toast_end:"Tour abgeschlossen!", alert_hint:"— Guide-Tab für Details öffnen",
+    sos_title:"Notfallkontakt",
+    sos_subtitle:"Activemljet eBike-Verleih · Polače",
+    sos_owner:"Inhaber",
+    sos_staff:"Personal",
+    sos_hours:"Öffnungszeiten: täglich 9:00 – 19:00",
+    sos_call:"Anrufen",
+    sos_close:"Schließen",
+    sos_cancel:"Abbrechen",
+    sos_confirm:"Bestätigen",
+    sos_info:"⚠️ Beide Nummern stehen für Fahrradverleih, Touren und Hilfe zur Verfügung. Tippen Sie auf Anrufen oder WhatsApp für direkten Kontakt. Ihre GPS-Position wird in WhatsApp-Nachrichten aufgenommen.",
+    sos_gps_locating:"Suche...",
+    sos_confirm_call_title:"Inhaber anrufen?",
+    sos_confirm_call_text:"Sie sind dabei anzurufen:",
+    sos_confirm_wa_title:"WhatsApp öffnen?",
+    sos_confirm_wa_text:"Sie sind dabei, eine WhatsApp-Nachricht zu senden an:",
+    sos_wa_msg:"🆘 Hallo, ich brauche Hilfe — ich fahre mit dem Fahrrad auf Mljet und brauche Unterstützung von Activemljet.",
+    wx_loading:"⏳ Wetter wird geladen...",
+    wx_offline:"📡 Kein Internet",
+    wx_extreme_heat:"🌡️ EXTREME HITZE",
+    wx_heat_risk:"⚠️ HITZERISIKO",
+    wx_drink_water:"💧 WASSER TRINKEN",
+    wx_strong_wind:"💨 STARKER WIND",
+    wx_rain:"🌧 REGEN — VORHERSAGE PRÜFEN",
+    wx_good:"✅ GUTE BEDINGUNGEN",
+    wx_cold:"🧥 WARM ANZIEHEN",
+    wx_feels:"gefühlt",
+    toast_locating:"Standort wird gesucht...",
+    toast_gps_searching:"Suche... gehen Sie nach draußen",
+    toast_gps_open_maps:"Öffne Google Maps für Standort...",
+    gps_help_close:"OK",
+    gps_help_denied_title:"Standortzugriff verweigert",
+    gps_help_denied_body:"Ihr Browser blockiert den Standortzugriff für diese Seite.<br><br><strong>So beheben Sie das:</strong><ol><li>Tippen Sie auf das <strong>🔒 Schloss-Symbol</strong> in der Adressleiste</li><li>Tippen Sie auf <strong>Berechtigungen</strong></li><li>Erlauben Sie <strong>Standort</strong></li><li>Seite neu laden</li></ol>Stellen Sie auch sicher, dass <strong>Ortungsdienste</strong> in den Telefoneinstellungen aktiviert sind.",
+    gps_help_unavail_title:"GPS-Signal nicht verfügbar",
+    gps_help_unavail_body:"Ihr Gerät kann derzeit kein GPS-Signal empfangen.<br><br><strong>Versuchen Sie Folgendes:</strong><ol><li>Gehen Sie ins Freie mit freier Sicht auf den Himmel</li><li>Warten Sie 10–30 Sekunden, bis GPS einrastet</li><li>Stellen Sie sicher, dass der Flugmodus aus ist</li></ol>",
+    gps_help_timeout_title:"GPS dauert zu lange",
+    gps_help_timeout_body:"GPS braucht zu lange, um zu antworten.<br><br>Versuchen Sie nach draußen zu gehen, weg von Gebäuden, und versuchen Sie es erneut. GPS funktioniert am besten mit freier Sicht auf den Himmel.",
+    gps_help_unsup_title:"GPS nicht unterstützt",
+    gps_help_unsup_body:"Ihr Browser unterstützt keine Standortdienste. Bitte verwenden Sie Chrome, Safari oder Firefox.",
+    cps:[
+      {short:"Römischer Palast & Hafen",
+       desc:"Polače ist die älteste Siedlung auf Mljet und reicht bis in griechische und illyrische Zeiten zurück. Hier sehen Sie beeindruckende Überreste eines spätantiken Palastes vom Ende des 5. Jh. n. Chr. — der drittgrößte an der Adria, nach der Arena in Pula und dem Diokletianpalast in Split. Der Hafen ist einer der sichersten an der gesamten dalmatinischen Küste.",
+       tips:["🏛️ Römische Ruinen am Wasser","⛵ Blick auf die Inseln Tajnik und Ovrata","📸 Perfektes Buchtpanorama","⚓ Unterwasser-Schiffswrackstätten"],
+       tags:["Römischer Palast","5. Jh. n. Chr.","Illyrer","Griechen"], hist:"Illyrer · Römer · Griechen · 5. Jh. n. Chr."},
+      {short:"Gezeitenströmung & Benediktinermühle",
+       desc:"Veliki most ist das Tor zwischen offenem Meer und Veliko jezero. Vor 1958 war er flacher und schmaler, mit starken Gezeitenströmungen, die alle 6 Stunden ihre Richtung änderten. Die Benediktiner bauten hier im 16. Jh. eine Mühle, angetrieben von diesen Strömungen. 1958 abgerissen, 2016 wiederaufgebaut.",
+       tips:["🌊 Beobachten Sie die Gezeitenströmung","🏗️ Wiederaufgebaute Brücke (2016)","🐠 Tolle Stelle zum Beobachten von Meereslebewesen","🧂 Standort der Benediktiner-Salzpfanne"],
+       tags:["Benediktinermühle","Gezeitenstr.","Brücke 2016"], hist:"Benediktiner · 1958 abgerissen · 2016 wiederaufgebaut"},
+      {short:"Benediktinerkloster 1177–1198",
+       desc:"Auf einer kleinen Insel mitten im Veliko jezero steht das Benediktinerkloster mit der Kirche Mariä Himmelfahrt, erbaut zwischen 1177 und 1198. Eines der wichtigsten kulturellen Zentren Dalmatiens. Seine Bibliothek war eine der reichsten Benediktinerbibliotheken in Dalmatien. 1809 von Napoleon geschlossen, 1998 zurückgegeben.",
+       tips:["⛵ Bootsfahrt zur Insel (~5 Min.)","⛪ Romanisch-Renaissance-Architektur","📚 Eine der reichsten Bibliotheken Dalmatiens","🏰 Renaissance-Wehrturm an der SO-Ecke"],
+       tags:["1177–1198","Benediktiner","Romanik","Renaissance"], hist:"Papst Innozenz III. · 1198 · 1809 geschlossen · 1998"},
+      {short:"Salzkanal & Malerische Passage",
+       desc:"Ein winziges Dorf (~30 Einwohner), gegründet 1825 von der Familie Sršen. Benannt nach der Salzgewinnung in der Benediktinerzeit. Der Soline-Kanal ist das wichtigste nautische Tor zum Veliko jezero. Ein kurzer Spaziergang führt zu einer Höhle mit Stalaktiten und Stalagmiten.",
+       tips:["🧂 Benannt nach Benediktiner-Salzpfannen","🚤 Malerische Soline-Kanal-Aussicht","🦇 Höhle mit Stalaktiten — 5 Min. Fußweg","📸 Sonnenuntergang am See"],
+       tags:["Salzgewinnung","Gegr. 1825","Soline-Kanal","Höhle"], hist:"Benediktiner · Familie Sršen · 1825"},
+      {short:"Hotel Odysseus & eBike-Verleih",
+       desc:"Die jüngste Siedlung auf Mljet, aus der Fischergemeinschaft Goveđari hervorgegangen. Hotel Odysseus (1978) ist das einzige Hotel auf der Insel (~320 Gäste). Hier befindet sich auch der Activemjet eBike-Verleih. In der Nähe gibt es römische Villen und Unterwasser-Amphorenstandorte.",
+       tips:["🚴 Activemjet eBike-Verleih hier","🏨 Hotel Odysseus — einziges auf Mljet","⚓ Unterwasser-Amphorenstandorte","🌅 Westlicher Sonnenuntergangspunkt"],
+       tags:["eBike-Verleih","Hotel Odysseus 1978","Römische Villen"], hist:"Goveđari-Gemeinschaft · Hotel 1978"},
+      {short:"Ethnographisches Dorf & Kiefernwälder",
+       desc:"Das älteste und am besten erhaltene Dorf auf Mljet, offiziell ein ethnographisches Dorf. Erstmals erwähnt am 8. April 1793 in einem Benediktiner-Siedlungsvertrag. Nikolauskirche 1927 erbaut. Umgeben von Aleppo-Kiefern- und Steineichenwäldern. HINWEIS: Hier gibt es keinen Meereswind — sehr heiß zur Mittagszeit im Sommer!",
+       tips:["🌿 Original traditionelle Architektur","⛪ Nikolauskirche (1927)","🚶 Wanderwege in alle Richtungen","⚠️ Kein Meereswind — heiß mittags!"],
+       tags:["Ethnographisches Dorf","Siedlung 1793","Benediktiner"], hist:"Siedlung 1793 · Pfarrei gegründet 1897"}
+    ],
+    tours:[
+      {name:"Lake Classic", sub:"Polače → See → Polače", dl:"LEICHT",
+       desc:"Die klassische Tour des NP Mljet. Ein sanfter Uferpfad führt um den Veliko jezero, vorbei am ikonischen Benediktinerkloster auf der St. Mary's Insel. Perfekt für Einsteiger und Familien.",
+       stops_list:["🏛️ Polače – Römische Palastruinen","🌊 Veliki most – Gezeitenmühlkanal","⛪ St. Mary's Insel-Kloster","🧂 Soline – Salzdorf & Höhle","🌿 Goveđari – Ethnographisches Dorf","🏛️ Polače – Rückkehr"]},
+      {name:"Lake & Pomena", sub:"Polače → See → Pomena → Polače", dl:"LEICHT+",
+       desc:"Verbindet die Seenrunde mit einer Küstenerweiterung nach Pomena — einem charmanten Fischerdorf mit Steinhäusern, Hafencafés und dem einzigen Hotel der Insel. Mittagspause am Meer.",
+       stops_list:["🏛️ Polače – Start","🌊 Veliki most – Gezeitenmühle","⛪ St. Mary's Insel","🧂 Soline – Salzdorf","🏨 Pomena – Fischerdorf & Mittagessen","🌿 Goveđari – Ethnographisches Dorf","🏛️ Polače – Rückkehr"]},
+      {name:"Odysseus-Höhle", sub:"Polače → Odysseus-Höhle → Polače", dl:"MITTEL",
+       desc:"Eine mythologische Reise zur legendären Höhle, in der Odysseus geruht haben soll. Inklusive dramatischem Abstieg, Schwimmen im türkisfarbenen Pool der Meereshöhle und Panoramablicken vom Adria-Kamm.",
+       stops_list:["🏛️ Polače – Start","🌄 Aussichtspunkt Südkamm","⛰️ Küstenpanorama","🗿 Odysseus-Höhle – Schwimmen","🏛️ Polače – Rückkehr"]},
+      {name:"Saplunara Ganztag", sub:"Polače → Ostküste → Saplunara → Polače", dl:"EXPERTE",
+       desc:"Die ultimative Mljet-Odyssee. Durchqueren Sie die ganze Insel, fahren Sie wilde Ostküsten und erreichen Sie Saplunara — den schönsten Sandstrand Süddalmatiens. Ein traditionelles Konoba-Mittagessen ist inklusive.",
+       stops_list:["🏛️ Polače – Start","🌊 Seepassage","⛪ St. Mary's Insel","🧂 Soline","🌿 Goveđari","⛰️ Montokuc-Gipfel","🚢 Sobra – Fährhafen","🏖️ Saplunara – Sandstrandbad","🍽️ Konoba-Mittagessen","🏛️ Polače – Rückkehr"]}
+    ]
+  }  ,
+  it:{
+    gps_help_close:"OK",
+    l_avgspd:"Velocità media",
+    l_cal:"Calorie",
+    l_depth:"Profondità max",
+    l_dist:"Distanza",
+    l_elevstat:"Dislivello",
+    l_forest:"Copertura forestale",
+    l_greek:"Eredità greca",
+    l_heat_t:"Allerta caldo — Interno di Goveđari",
+    l_heat_x:"L'interno intorno a Goveđari NON ha brezza marina. Le temperature superano regolarmente i 38°C con alta umidità. Pedalare prima delle 10:00 o dopo le 17:00. Segni di colpo di calore: vertigini, nausea, confusione.",
+    l_hist:"Breve storia",
+    l_hist_t:"Dagli Illiri alla Croazia",
+    l_hist_x:"Abitata dal II millennio a.C. I Romani costruirono qui il terzo palazzo più grande dell'Adriatico. Nel 1151 i monaci benedettini costruirono il monastero di Santa Maria. L'isola passò attraverso Repubblica di Ragusa, Francia napoleonica, Austria-Ungheria, Italia, Jugoslavia, e divenne parte della Croazia. Parco Nazionale dal 1960.",
+    l_lakes:"I laghi",
+    l_max:"Velocità max",
+    l_oak:"Quercia sempreverde con ampia chioma sferica, corteccia grigio scuro screpolata, foglie coriacee fino a 7 cm. Produce ghiande. Zone chiave: Velika dolina, Valakija, Planjak, Knežepolje.",
+    l_oak_t:"🌳 Leccio",
+    l_pine:"Albero dominante che copre la maggior parte del parco. Portato a Mljet dagli antichi Greci. Aghi blu-verdi 6–10 cm, cresce fino a 20 m. Denso intorno alle sponde dei laghi.",
+    l_pine_t:"🌲 Pino d'Aleppo",
+    l_ridetime:"Tempo di guida",
+    l_species:"Specie marine protette",
+    l_stats_h:"Riepilogo tour",
+    l_veg:"Vegetazione forestale",
+    l_visited:"Tappe visitate",
+    l_water_t:"Allerta acqua — portare almeno 2L",
+    l_water_x:"Non ci sono fonti d'acqua potabile sul percorso ciclistico del lago. Portare almeno 2 litri a persona. Riempire solo a Pomena (Hotel Odysseus) o al porto di Polače. Rischio disidratazione ALTO in estate.",
+    sp1:"Medusa endemica — non esiste altrove sulla Terra",
+    sp1s:"innocua per i bagnanti",
+    sp2:"La più grande barriera corallina cespugliosa al mondo",
+    sp2s:"profondità 4–18 m",
+    sp3:"Pinna nobilis ⛔ RIGOROSAMENTE PROTETTA",
+    sp3s:"fino a 1 m · il più grande bivalve dell'Adriatico",
+    sp4:"Capasanta — la più grande popolazione adriatica in Malo jezero",
+    sp5:"Dattero di mare ⛔ RIGOROSAMENTE PROTETTO",
+    sp5s:"vive ~80 anni",
+    splash_btn:"🚴 Inizia l'avventura",
+    pdf_title:"Scarica la guida PDF",
+    pdf_sub:"Gratis · 7 lingue · 68 pagine",
+    t_track:"🚧 Tracker",t_guide:"Guida",t_tours:"Tour",t_nature:"Natura",t_stats:"🚧 Statistiche",
+    l_time:"durata",l_stops:"tappe",l_progress:"Avanzamento tour",
+    l_elev:"🏔 PROFILO ALTIMETRICO · ~12 km",
+    l_guide_h:"🚴 TOUR EBIKE · GUIDA TAPPE",
+    l_tours_ttl:"Avventure eBike", l_tours_subhero:"Parco Nazionale di Mljet · 4 percorsi",
+    l_tours_pick:"Scegli il tuo percorso", l_tour_btn:"🚴 Avvia questo tour",
+    l_book_now:"Prenota",
+    l_per_person:"a persona",
+    l_book_msg:'Ciao Active Mljet! Vorrei prenotare il tour "{tour}". Inviatemi i dettagli.',
+    l_nat_title:"Isola di Mljet", l_nat_sub:"Parco Nazionale · Mare Adriatico · Croazia",
+    l_safety:"⚠️ Sicurezza e consigli essenziali",
+    btn_start:"🚴 Inizia tour eBike",
+    btn_pause:"⏸ Pausa",btn_resume:"▶ Riprendi",btn_end:"🏁 Termina tour",
+    btn_map:"🗺️ Apri in Google Maps",
+    map_my_location:"📍 La mia posizione",
+    map_earth:"Google Earth",
+    map_back_hq:"🏛️ Activemljet HQ",
+    map_you:"TU",
+    wip_label:"🚧",
+    gps_on:"GPS attivo",gps_off:"GPS spento",
+    toast_locating:"Localizzazione in corso...",
+    toast_gps_searching:"Ricerca... uscire all'aperto",
+    sos_title:"Contatto di emergenza",
+    sos_subtitle:"Activemljet noleggio eBike · Polače",
+    sos_owner:"Proprietario",
+    sos_staff:"Staff",
+    sos_hours:"Orario: ogni giorno 9:00 – 19:00",
+    sos_call:"Chiama",
+    sos_close:"Chiudi",
+    sos_cancel:"Annulla",
+    sos_confirm:"Conferma",
+    sos_info:"⚠️ Entrambi i numeri sono disponibili per noleggio bici, tour e assistenza. Premi Chiama o WhatsApp per contattare direttamente.",
+    sos_gps_locating:"localizzazione...",
+    sos_confirm_call_title:"Chiamare?",
+    sos_confirm_call_text:"Stai per chiamare:",
+    sos_confirm_wa_title:"Aprire WhatsApp?",
+    sos_confirm_wa_text:"Stai per inviare un messaggio WhatsApp a:",
+    sos_wa_msg:"🆘 Ciao, ho bisogno di aiuto — sto pedalando sull'isola di Mljet e ho bisogno dell'assistenza di Activemljet.",
+    cps:[
+      {short:"Activemljet noleggio eBike · Palazzo romano e porto",
+       desc:"Polače è il più antico insediamento di Mljet, risalente all'epoca greca e illirica — e la sede di Activemljet noleggio eBike, dove inizia il tuo tour! Qui puoi vedere imponenti resti di un palazzo tardo-antico della fine del V secolo d.C. — il terzo più grande dell'Adriatico, dopo l'Arena di Pola e il Palazzo di Diocleziano a Spalato. Il porto è uno dei più sicuri di tutta la costa dalmata.",
+       tips:["🚴 Centro Activemljet noleggio eBike e tour","🏛️ Rovine romane lungo il lungomare","⛵ Vista sul porto e baie","🌅 Bellissima alba"],
+       tags:["🏛️ Romano","📜 Storia","🌅 Alba"],
+       hist:"Costruita dall'imperatore Diocleziano (245–311 d.C.). Considerata il prototipo del Palazzo di Diocleziano a Spalato."},
+      {short:"Canale stretto che collega il mare al Veliko jezero",
+       desc:"Veliki most è uno stretto canale di marea che collega Veliko jezero al mare aperto. Le maree creano forti correnti che cambiano direzione due volte al giorno. Il vecchio mulino di marea benedettino sorgeva qui — utilizzava la forza delle maree per macinare grano. Oggi è un punto fotografico iconico.",
+       tips:["📸 Punto fotografico iconico","🐟 Osservare i pesci nel canale","⚠️ Non nuotare durante le maree forti"],
+       tags:["🌊 Maree","🐟 Pesci","🛶 Canyon"],
+       hist:"Costruito nel XII secolo dai monaci benedettini per macinare con la forza delle maree."},
+      {short:"Isolotto monastico nel Veliko jezero",
+       desc:"L'isolotto di Santa Maria si trova al centro del Veliko jezero ed ospita il monastero benedettino del XII secolo, fondato nel 1151. Si raggiunge in 5 minuti di battello da Mali Most. Il chiostro e la chiesa sono mete imperdibili. Il monastero rimase attivo per circa 700 anni.",
+       tips:["🚣 Battello regolare da Mali Most","⛪ Visita il chiostro","🕯️ Esplora l'interno della chiesa"],
+       tags:["⛪ Monastero","🚣 Battello","🏛️ XII secolo"],
+       hist:"Fondato nel 1151 dai benedettini. Il monastero rimase attivo per 700 anni."},
+      {short:"Villaggio costiero famoso per il sale e le grotte",
+       desc:"Soline è un villaggio costiero noto per la sua tradizione di produzione del sale che risale al Medioevo. La grotta locale produceva sale evaporando l'acqua di mare. Oggi è possibile acquistare sale fatto a mano direttamente dai locali. Spiagge tranquille e baia riparata.",
+       tips:["🧂 Compra sale artigianale dai locali","🏖 Spiagge tranquille","🐚 Raccogli conchiglie sulla spiaggia"],
+       tags:["🧂 Sale","🏖 Spiaggia","🐚 Conchiglie"],
+       hist:"Sale prodotto qui dall'XI secolo, fornitura strategica."},
+      {short:"Villaggio di pescatori con porto naturale",
+       desc:"Pomena è un caratteristico villaggio di pescatori con un porto naturale, case in pietra tradizionali e l'unico hotel sull'isola (Hotel Odisej). Punto perfetto per una pausa pranzo. Cucina dalmata autentica nelle konobe locali. Acque cristalline per nuotare.",
+       tips:["🍽 Pranza al Konoba Stermasi","🏨 Hotel Odisej (unico hotel dell'isola)","🏊 Acque cristalline per nuotare"],
+       tags:["🏘 Villaggio","⚓ Porto","🍽 Konoba"],
+       hist:"Insediamento di pescatori dal XIV secolo."},
+      {short:"Villaggio etnografico tradizionale",
+       desc:"Goveđari è un villaggio etnografico ben conservato con architettura tradizionale di pietra. È il centro amministrativo del Parco Nazionale di Mljet. Il museo all'aperto mostra come si viveva sull'isola nei secoli passati. Punto informazioni del parco.",
+       tips:["🏛 Visita guidata del museo all'aperto","ℹ️ Centro informazioni del parco","📸 Architettura tradizionale fotogenica"],
+       tags:["🏘 Tradizionale","🪨 Pietra","🏛 Etno"],
+       hist:"Centro amministrativo del Parco Nazionale dal 1960."}
+    ],
+    tours:[
+      {name:"Lake Classic", sub:"Polače → Lago → Polače", dl:"FACILE",
+       desc:"Il giro classico del Parco Nazionale di Mljet. Un sentiero piacevole costeggia il Veliko jezero passando per il famoso monastero benedettino.",
+       stops_list:["🏛️ Polače – Palazzo romano","🌊 Veliki most – Mulino","⛪ Isolotto S. Maria","🧂 Soline","🌿 Goveđari","🏛️ Polače – Ritorno"]},
+      {name:"Lake & Pomena", sub:"Polače → Lago → Pomena → Polače", dl:"FACILE+",
+       desc:"Combina il giro del lago con un'estensione costiera fino a Pomena — un grazioso villaggio di pescatori. Pausa pranzo in riva al mare.",
+       stops_list:["🏛️ Polače","🌊 Veliki most","⛪ Isolotto S. Maria","🧂 Soline","🏨 Pomena","🌿 Goveđari","🏛️ Polače"]},
+      {name:"Grotta di Odisseo", sub:"Polače → Grotta → Polače", dl:"MEDIO",
+       desc:"Viaggio mitologico alla grotta dove riposò Odisseo. Discesa drammatica, nuoto nel pool turchese, panorami sull'Adriatico.",
+       stops_list:["🏛️ Polače","🌄 Cresta sud","⛰️ Panorama costiero","🗿 Grotta di Odisseo","🏛️ Polače"]},
+      {name:"Saplunara Tutto il giorno", sub:"Polače → Costa Est → Saplunara → Polače", dl:"ESPERTO",
+       desc:"L'odissea definitiva di Mljet. Attraversa l'intera isola fino a Saplunara — la più bella spiaggia sabbiosa del sud Dalmazia. Pranzo in konoba incluso.",
+       stops_list:["🏛️ Polače","🌊 Lago","⛪ S. Maria","🧂 Soline","🌿 Goveđari","⛰️ Montokuc","🚢 Sobra","🏖️ Saplunara","🍽️ Konoba","🏛️ Polače"]}
+    ]
+  },
+  es:{
+    gps_help_close:"OK",
+    l_avgspd:"Velocidad media",
+    l_cal:"Calorías",
+    l_depth:"Profundidad máx",
+    l_dist:"Distancia",
+    l_elevstat:"Desnivel",
+    l_forest:"Cobertura forestal",
+    l_greek:"Herencia griega",
+    l_heat_t:"Alerta de calor — Interior de Goveđari",
+    l_heat_x:"El interior alrededor de Goveđari NO tiene brisa marina. Las temperaturas superan regularmente los 38°C con alta humedad. Montar antes de las 10:00 o después de las 17:00. Señales de golpe de calor: mareos, náuseas, confusión.",
+    l_hist:"Breve historia",
+    l_hist_t:"De los ilirios a Croacia",
+    l_hist_x:"Habitada desde el II milenio a.C. Los romanos construyeron aquí el tercer palacio más grande del Adriático. En 1151 los monjes benedictinos construyeron el monasterio de Santa María. La isla pasó por la República de Ragusa, la Francia napoleónica, Austria-Hungría, Italia, Yugoslavia, y se convirtió en parte de Croacia. Parque Nacional desde 1960.",
+    l_lakes:"Los lagos",
+    l_max:"Velocidad máx",
+    l_oak:"Encina perennifolia con amplia copa esférica, corteza gris oscuro agrietada, hojas coriáceas hasta 7 cm. Produce bellotas. Zonas clave: Velika dolina, Valakija, Planjak, Knežepolje.",
+    l_oak_t:"🌳 Encina",
+    l_pine:"Árbol dominante que cubre la mayor parte del parque. Traído a Mljet por los antiguos griegos. Agujas azul-verdosas 6–10 cm, crece hasta 20 m. Denso alrededor de las orillas de los lagos.",
+    l_pine_t:"🌲 Pino de Alepo",
+    l_ridetime:"Tiempo de viaje",
+    l_species:"Especies marinas protegidas",
+    l_stats_h:"Resumen del tour",
+    l_veg:"Vegetación forestal",
+    l_visited:"Paradas visitadas",
+    l_water_t:"Alerta de agua — llevar mínimo 2L",
+    l_water_x:"No hay fuentes de agua potable en la ruta ciclista del lago. Lleva al menos 2 litros por persona. Rellena solo en Pomena (Hotel Odysseus) o el puerto de Polače. Riesgo de deshidratación ALTO en verano.",
+    sp1:"Medusa endémica — no existe en ningún otro lugar de la Tierra",
+    sp1s:"inofensiva para los bañistas",
+    sp2:"El arrecife de coral más grande del mundo",
+    sp2s:"profundidad 4–18 m",
+    sp3:"Nacra ⛔ ESTRICTAMENTE PROTEGIDA",
+    sp3s:"hasta 1 m · el bivalvo más grande del Adriático",
+    sp4:"Vieira — la mayor población adriática en Malo jezero",
+    sp5:"Dátil de mar ⛔ ESTRICTAMENTE PROTEGIDO",
+    sp5s:"vive ~80 años",
+    splash_btn:"🚴 Empezar aventura",
+    pdf_title:"Descargar guía PDF",
+    pdf_sub:"Gratis · 7 idiomas · 68 páginas",
+    t_track:"🚧 Tracker",t_guide:"Guía",t_tours:"Tours",t_nature:"Naturaleza",t_stats:"🚧 Estadísticas",
+    l_time:"duración",l_stops:"paradas",l_progress:"Progreso del tour",
+    l_elev:"🏔 PERFIL DE ALTITUD · ~12 km",
+    l_guide_h:"🚴 TOUR EBIKE · GUÍA DE PARADAS",
+    l_tours_ttl:"Aventuras eBike", l_tours_subhero:"Parque Nacional Mljet · 4 rutas",
+    l_tours_pick:"Elige tu ruta", l_tour_btn:"🚴 Iniciar este tour",
+    l_book_now:"Reservar",
+    l_per_person:"por persona",
+    l_book_msg:'¡Hola Active Mljet! Quiero reservar el tour "{tour}". Por favor envíenme los detalles.',
+    l_nat_title:"Isla de Mljet", l_nat_sub:"Parque Nacional · Mar Adriático · Croacia",
+    l_safety:"⚠️ Seguridad y consejos esenciales",
+    btn_start:"🚴 Iniciar tour eBike",
+    btn_pause:"⏸ Pausa",btn_resume:"▶ Reanudar",btn_end:"🏁 Finalizar tour",
+    btn_map:"🗺️ Abrir en Google Maps",
+    map_my_location:"📍 Mi ubicación",
+    map_earth:"Google Earth",
+    map_back_hq:"🏛️ Activemljet HQ",
+    map_you:"TÚ",
+    wip_label:"🚧",
+    gps_on:"GPS activo",gps_off:"GPS apagado",
+    toast_locating:"Localizando...",
+    toast_gps_searching:"Buscando... salir al exterior",
+    sos_title:"Contacto de emergencia",
+    sos_subtitle:"Alquiler eBike Activemljet · Polače",
+    sos_owner:"Propietario",
+    sos_staff:"Personal",
+    sos_hours:"Horario: cada día 9:00 – 19:00",
+    sos_call:"Llamar",
+    sos_close:"Cerrar",
+    sos_cancel:"Cancelar",
+    sos_confirm:"Confirmar",
+    sos_info:"⚠️ Ambos números están disponibles para alquiler de bicis, tours y ayuda. Pulsa Llamar o WhatsApp para contactar directamente.",
+    sos_gps_locating:"localizando...",
+    sos_confirm_call_title:"¿Llamar?",
+    sos_confirm_call_text:"Estás a punto de llamar:",
+    sos_confirm_wa_title:"¿Abrir WhatsApp?",
+    sos_confirm_wa_text:"Estás a punto de enviar un mensaje WhatsApp a:",
+    sos_wa_msg:"🆘 Hola, necesito ayuda — estoy en bicicleta en Mljet y necesito asistencia de Activemljet.",
+    cps:[
+      {short:"Alquiler eBike Activemljet · Palacio romano y puerto",
+       desc:"Polače es el asentamiento más antiguo de Mljet, que data de tiempos griegos e ilirios — y es la base del alquiler de eBike Activemljet, ¡donde comienza tu tour! Aquí puedes ver impresionantes restos de un palacio de la antigüedad tardía de finales del siglo V d.C. — el tercero más grande del Adriático, después de la Arena de Pula y el Palacio de Diocleciano en Split. El puerto es uno de los más seguros de toda la costa dálmata.",
+       tips:["🚴 Centro de alquiler y tours Activemljet","🏛️ Ruinas romanas en el paseo marítimo","⛵ Vistas al puerto y bahías","🌅 Hermoso amanecer"],
+       tags:["🏛️ Romano","📜 Historia","🌅 Amanecer"],
+       hist:"Construido por el emperador Diocleciano (245–311 d.C.). Considerado prototipo del Palacio de Diocleciano en Split."},
+      {short:"Canal estrecho que conecta el mar con Veliko jezero",
+       desc:"Veliki most es un estrecho canal de marea que conecta Veliko jezero con el mar abierto. Las mareas crean fuertes corrientes que cambian de dirección dos veces al día. El antiguo molino de marea benedictino estaba aquí — utilizaba la fuerza de las mareas para moler grano. Hoy es un punto fotográfico icónico.",
+       tips:["📸 Punto fotográfico icónico","🐟 Observa los peces en el canal","⚠️ No nades durante las mareas fuertes"],
+       tags:["🌊 Mareas","🐟 Peces","🛶 Cañón"],
+       hist:"Construido en el siglo XII por los monjes benedictinos para moler con la fuerza de las mareas."},
+      {short:"Isla monástica en el Veliko jezero",
+       desc:"La isla de Santa María se encuentra en el centro del Veliko jezero y alberga el monasterio benedictino del siglo XII, fundado en 1151. Se accede en barco de 5 minutos desde Mali Most. El claustro y la iglesia son visitas imprescindibles. El monasterio funcionó durante unos 700 años.",
+       tips:["🚣 Barco regular desde Mali Most","⛪ Visita el claustro","🕯️ Explora el interior de la iglesia"],
+       tags:["⛪ Monasterio","🚣 Barco","🏛️ Siglo XII"],
+       hist:"Fundado en 1151 por los benedictinos. El monasterio funcionó durante 700 años."},
+      {short:"Pueblo costero famoso por la sal y las cuevas",
+       desc:"Soline es un pueblo costero conocido por su tradición de producción de sal desde la Edad Media. La cueva local producía sal evaporando agua de mar. Hoy puedes comprar sal artesanal directamente a los locales. Playas tranquilas y bahía resguardada.",
+       tips:["🧂 Compra sal artesanal a los locales","🏖 Playas tranquilas","🐚 Recoge conchas en la playa"],
+       tags:["🧂 Sal","🏖 Playa","🐚 Conchas"],
+       hist:"Sal producida aquí desde el siglo XI."},
+      {short:"Pueblo pesquero con puerto natural",
+       desc:"Pomena es un pintoresco pueblo pesquero con puerto natural, casas tradicionales de piedra y el único hotel de la isla (Hotel Odisej). Punto perfecto para una parada de almuerzo. Auténtica cocina dálmata en las konobas locales. Aguas cristalinas para nadar.",
+       tips:["🍽 Almuerza en Konoba Stermasi","🏨 Hotel Odisej (único hotel de la isla)","🏊 Aguas cristalinas para nadar"],
+       tags:["🏘 Pueblo","⚓ Puerto","🍽 Konoba"],
+       hist:"Asentamiento pesquero desde el siglo XIV."},
+      {short:"Pueblo etnográfico tradicional",
+       desc:"Goveđari es un pueblo etnográfico bien conservado con arquitectura tradicional de piedra. Es el centro administrativo del Parque Nacional de Mljet. El museo al aire libre muestra cómo se vivía en la isla en siglos pasados. Punto de información del parque.",
+       tips:["🏛 Visita guiada del museo al aire libre","ℹ️ Centro de información del parque","📸 Arquitectura tradicional fotogénica"],
+       tags:["🏘 Tradicional","🪨 Piedra","🏛 Etno"],
+       hist:"Centro administrativo del Parque Nacional desde 1960."}
+    ],
+    tours:[
+      {name:"Lake Classic", sub:"Polače → Lago → Polače", dl:"FÁCIL",
+       desc:"La ruta clásica del Parque Nacional de Mljet. Un sendero suave bordea el Veliko jezero pasando por el famoso monasterio benedictino.",
+       stops_list:["🏛️ Polače – Palacio romano","🌊 Veliki most","⛪ Isla Sta. María","🧂 Soline","🌿 Goveđari","🏛️ Polače – Regreso"]},
+      {name:"Lake & Pomena", sub:"Polače → Lago → Pomena → Polače", dl:"FÁCIL+",
+       desc:"Combina la vuelta al lago con una extensión costera hasta Pomena — encantador pueblo pesquero. Almuerzo junto al mar.",
+       stops_list:["🏛️ Polače","🌊 Veliki most","⛪ Isla Sta. María","🧂 Soline","🏨 Pomena","🌿 Goveđari","🏛️ Polače"]},
+      {name:"Cueva de Odiseo", sub:"Polače → Cueva → Polače", dl:"MEDIO",
+       desc:"Viaje mitológico a la cueva donde descansó Odiseo. Bajada espectacular, baño en piscina turquesa, vistas panorámicas del Adriático.",
+       stops_list:["🏛️ Polače","🌄 Cresta sur","⛰️ Panorama","🗿 Cueva de Odiseo","🏛️ Polače"]},
+      {name:"Saplunara Día completo", sub:"Polače → Costa Este → Saplunara → Polače", dl:"EXPERTO",
+       desc:"La odisea definitiva de Mljet. Atraviesa toda la isla hasta Saplunara — la playa de arena más bella del sur de Dalmacia. Almuerzo en konoba incluido.",
+       stops_list:["🏛️ Polače","🌊 Lago","⛪ Sta. María","🧂 Soline","🌿 Goveđari","⛰️ Montokuc","🚢 Sobra","🏖️ Saplunara","🍽️ Konoba","🏛️ Polače"]}
+    ]
+  },
+  fr:{
+    gps_help_close:"OK",
+    l_avgspd:"Vitesse moyenne",
+    l_cal:"Calories",
+    l_depth:"Profondeur max",
+    l_dist:"Distance",
+    l_elevstat:"Dénivelé",
+    l_forest:"Couverture forestière",
+    l_greek:"Héritage grec",
+    l_heat_t:"Alerte chaleur — Intérieur de Goveđari",
+    l_heat_x:"L'intérieur autour de Goveđari N'A PAS de brise marine. Les températures dépassent régulièrement 38°C avec une forte humidité. Rouler avant 10h00 ou après 17h00. Signes de coup de chaleur : vertiges, nausées, confusion.",
+    l_hist:"Brève histoire",
+    l_hist_t:"Des Illyriens à la Croatie",
+    l_hist_x:"Habitée depuis le IIe millénaire av. J.-C. Les Romains y construisirent le troisième plus grand palais de l'Adriatique. En 1151, les moines bénédictins construisirent le monastère Sainte-Marie. L'île passa par la République de Raguse, la France napoléonienne, l'Autriche-Hongrie, l'Italie, la Yougoslavie, et fait désormais partie de la Croatie. Parc national depuis 1960.",
+    l_lakes:"Les lacs",
+    l_max:"Vitesse max",
+    l_oak:"Chêne à feuilles persistantes avec large couronne sphérique, écorce gris foncé craquelée, feuilles coriaces jusqu'à 7 cm. Produit des glands. Zones clés : Velika dolina, Valakija, Planjak, Knežepolje.",
+    l_oak_t:"🌳 Chêne vert",
+    l_pine:"Arbre dominant couvrant la majeure partie du parc. Apporté à Mljet par les Grecs anciens. Aiguilles bleu-vert 6–10 cm, atteint 20 m. Dense autour des rives des deux lacs.",
+    l_pine_t:"🌲 Pin d'Alep",
+    l_ridetime:"Temps de trajet",
+    l_species:"Espèces marines protégées",
+    l_stats_h:"Résumé du tour",
+    l_veg:"Végétation forestière",
+    l_visited:"Étapes visitées",
+    l_water_t:"Alerte eau — emporter au moins 2L",
+    l_water_x:"Aucune source d'eau potable sur l'itinéraire cyclable du lac. Apportez au moins 2 litres par personne. Remplissez uniquement à Pomena (Hôtel Odysseus) ou au port de Polače. Risque de déshydratation ÉLEVÉ en été.",
+    sp1:"Méduse endémique — introuvable ailleurs sur Terre",
+    sp1s:"inoffensive pour les nageurs",
+    sp2:"Le plus grand récif corallien buissonnant au monde",
+    sp2s:"profondeur 4–18 m",
+    sp3:"Grande nacre ⛔ STRICTEMENT PROTÉGÉE",
+    sp3s:"jusqu'à 1 m · le plus grand bivalve de l'Adriatique",
+    sp4:"Coquille Saint-Jacques — la plus grande population adriatique à Malo jezero",
+    sp5:"Datte de mer ⛔ STRICTEMENT PROTÉGÉE",
+    sp5s:"vit ~80 ans",
+    splash_btn:"🚴 Commencer l'aventure",
+    pdf_title:"Télécharger le guide PDF",
+    pdf_sub:"Gratuit · 7 langues · 68 pages",
+    t_track:"🚧 Tracker",t_guide:"Guide",t_tours:"Tours",t_nature:"Nature",t_stats:"🚧 Stats",
+    l_time:"durée",l_stops:"étapes",l_progress:"Progression du tour",
+    l_elev:"🏔 PROFIL D'ALTITUDE · ~12 km",
+    l_guide_h:"🚴 TOUR EBIKE · GUIDE DES ÉTAPES",
+    l_tours_ttl:"Aventures eBike", l_tours_subhero:"Parc national de Mljet · 4 itinéraires",
+    l_tours_pick:"Choisissez votre itinéraire", l_tour_btn:"🚴 Démarrer ce tour",
+    l_book_now:"Réserver",
+    l_per_person:"par personne",
+    l_book_msg:'Bonjour Active Mljet ! Je voudrais réserver le tour "{tour}". Veuillez m\'envoyer les détails.',
+    l_nat_title:"Île de Mljet", l_nat_sub:"Parc national · Mer Adriatique · Croatie",
+    l_safety:"⚠️ Sécurité et conseils essentiels",
+    btn_start:"🚴 Démarrer le tour eBike",
+    btn_pause:"⏸ Pause",btn_resume:"▶ Reprendre",btn_end:"🏁 Terminer le tour",
+    btn_map:"🗺️ Ouvrir dans Google Maps",
+    map_my_location:"📍 Ma position",
+    map_earth:"Google Earth",
+    map_back_hq:"🏛️ Activemljet HQ",
+    map_you:"VOUS",
+    wip_label:"🚧",
+    gps_on:"GPS actif",gps_off:"GPS éteint",
+    toast_locating:"Localisation...",
+    toast_gps_searching:"Recherche... sortez à l'extérieur",
+    sos_title:"Contact d'urgence",
+    sos_subtitle:"Location eBike Activemljet · Polače",
+    sos_owner:"Propriétaire",
+    sos_staff:"Personnel",
+    sos_hours:"Horaire : tous les jours 9h00 – 19h00",
+    sos_call:"Appeler",
+    sos_close:"Fermer",
+    sos_cancel:"Annuler",
+    sos_confirm:"Confirmer",
+    sos_info:"⚠️ Les deux numéros sont disponibles pour la location de vélos, les tours et l'assistance. Appuyez sur Appeler ou WhatsApp pour contacter directement.",
+    sos_gps_locating:"localisation...",
+    sos_confirm_call_title:"Appeler ?",
+    sos_confirm_call_text:"Vous êtes sur le point d'appeler :",
+    sos_confirm_wa_title:"Ouvrir WhatsApp ?",
+    sos_confirm_wa_text:"Vous êtes sur le point d'envoyer un message WhatsApp à :",
+    sos_wa_msg:"🆘 Bonjour, j'ai besoin d'aide — je fais du vélo sur Mljet et j'ai besoin de l'assistance d'Activemljet.",
+    cps:[
+      {short:"Location eBike Activemljet · Palais romain et port",
+       desc:"Polače est le plus ancien établissement de Mljet, datant des époques grecque et illyrienne — et la base de la location eBike Activemljet, où votre tour commence ! Vous pouvez voir d'impressionnants vestiges d'un palais de l'Antiquité tardive de la fin du Ve siècle apr. J.-C. — le troisième plus grand de l'Adriatique, après les Arènes de Pula et le Palais de Dioclétien à Split. Le port est l'un des plus sûrs de toute la côte dalmate.",
+       tips:["🚴 Centre de location et tours Activemljet","🏛️ Ruines romaines le long du front de mer","⛵ Vues sur le port et les baies","🌅 Magnifique lever de soleil"],
+       tags:["🏛️ Romain","📜 Histoire","🌅 Aube"],
+       hist:"Construit par l'empereur Dioclétien (245–311 apr. J.-C.). Considéré comme le prototype du Palais de Dioclétien à Split."},
+      {short:"Canal étroit reliant la mer au Veliko jezero",
+       desc:"Veliki most est un canal de marée étroit reliant le Veliko jezero à la mer ouverte. Les marées créent de forts courants qui changent de direction deux fois par jour. L'ancien moulin à marée bénédictin était ici — il utilisait la force des marées pour moudre le grain. Aujourd'hui, c'est un point photographique emblématique.",
+       tips:["📸 Point photographique emblématique","🐟 Observez les poissons dans le canal","⚠️ Ne nagez pas pendant les fortes marées"],
+       tags:["🌊 Marées","🐟 Poissons","🛶 Canyon"],
+       hist:"Construit au XIIe siècle par les moines bénédictins pour moudre avec la force des marées."},
+      {short:"Îlot monastique dans le Veliko jezero",
+       desc:"L'îlot Sainte-Marie se trouve au centre du Veliko jezero et abrite le monastère bénédictin du XIIe siècle, fondé en 1151. Accessible en bateau de 5 minutes depuis Mali Most. Le cloître et l'église sont des visites incontournables. Le monastère a fonctionné pendant environ 700 ans.",
+       tips:["🚣 Bateau régulier depuis Mali Most","⛪ Visitez le cloître","🕯️ Explorez l'intérieur de l'église"],
+       tags:["⛪ Monastère","🚣 Bateau","🏛️ XIIe siècle"],
+       hist:"Fondé en 1151 par les bénédictins. Le monastère a fonctionné pendant 700 ans."},
+      {short:"Village côtier célèbre pour le sel et les grottes",
+       desc:"Soline est un village côtier connu pour sa tradition de production de sel depuis le Moyen Âge. La grotte locale produisait du sel en évaporant l'eau de mer. Aujourd'hui, vous pouvez acheter du sel artisanal directement aux habitants. Plages tranquilles et baie abritée.",
+       tips:["🧂 Achetez du sel artisanal aux locaux","🏖 Plages tranquilles","🐚 Ramassez des coquillages sur la plage"],
+       tags:["🧂 Sel","🏖 Plage","🐚 Coquillages"],
+       hist:"Sel produit ici depuis le XIe siècle."},
+      {short:"Village de pêcheurs avec port naturel",
+       desc:"Pomena est un pittoresque village de pêcheurs avec un port naturel, des maisons traditionnelles en pierre et le seul hôtel de l'île (Hôtel Odisej). Point parfait pour une pause déjeuner. Authentique cuisine dalmate dans les konobas locales. Eaux cristallines pour la baignade.",
+       tips:["🍽 Déjeunez à la Konoba Stermasi","🏨 Hôtel Odisej (seul hôtel de l'île)","🏊 Eaux cristallines pour la baignade"],
+       tags:["🏘 Village","⚓ Port","🍽 Konoba"],
+       hist:"Établissement de pêcheurs depuis le XIVe siècle."},
+      {short:"Village ethnographique traditionnel",
+       desc:"Goveđari est un village ethnographique bien préservé avec une architecture traditionnelle en pierre. C'est le centre administratif du Parc national de Mljet. Le musée en plein air montre comment on vivait sur l'île dans les siècles passés. Point d'information du parc.",
+       tips:["🏛 Visite guidée du musée en plein air","ℹ️ Centre d'information du parc","📸 Architecture traditionnelle photogénique"],
+       tags:["🏘 Traditionnel","🪨 Pierre","🏛 Ethno"],
+       hist:"Centre administratif du Parc national depuis 1960."}
+    ],
+    tours:[
+      {name:"Lake Classic", sub:"Polače → Lac → Polače", dl:"FACILE",
+       desc:"L'itinéraire classique du Parc national de Mljet. Un sentier doux longe le Veliko jezero en passant devant le célèbre monastère bénédictin.",
+       stops_list:["🏛️ Polače – Palais romain","🌊 Veliki most","⛪ Île Ste. Marie","🧂 Soline","🌿 Goveđari","🏛️ Polače – Retour"]},
+      {name:"Lake & Pomena", sub:"Polače → Lac → Pomena → Polače", dl:"FACILE+",
+       desc:"Combine le tour du lac avec une extension côtière jusqu'à Pomena — charmant village de pêcheurs. Pause déjeuner au bord de la mer.",
+       stops_list:["🏛️ Polače","🌊 Veliki most","⛪ Île Ste. Marie","🧂 Soline","🏨 Pomena","🌿 Goveđari","🏛️ Polače"]},
+      {name:"Grotte d'Ulysse", sub:"Polače → Grotte → Polače", dl:"MOYEN",
+       desc:"Voyage mythologique vers la grotte où Ulysse se reposa. Descente spectaculaire, baignade dans la piscine turquoise, vues panoramiques sur l'Adriatique.",
+       stops_list:["🏛️ Polače","🌄 Crête sud","⛰️ Panorama","🗿 Grotte d'Ulysse","🏛️ Polače"]},
+      {name:"Saplunara Journée entière", sub:"Polače → Côte Est → Saplunara → Polače", dl:"EXPERT",
+       desc:"L'odyssée ultime de Mljet. Traversez toute l'île jusqu'à Saplunara — la plus belle plage de sable du sud de la Dalmatie. Déjeuner en konoba inclus.",
+       stops_list:["🏛️ Polače","🌊 Lac","⛪ Ste. Marie","🧂 Soline","🌿 Goveđari","⛰️ Montokuc","🚢 Sobra","🏖️ Saplunara","🍽️ Konoba","🏛️ Polače"]}
+    ]
+  }
+
+};
+
+// ═══════ CHECKPOINT META (lang-independent: coords, colors, names, photos) ═══════
+var CPS_META=[
+  {id:0,icon:"🏛️",name:"Polače",km:"Start",color:"#E05A3A",lat:42.7860,lng:17.3781,
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Polace_from_sea.jpg/800px-Polace_from_sea.jpg"},
+  {id:1,icon:"🌊",name:"Veliki most",km:"3.2 km",color:"#0096C7",lat:42.7480,lng:17.4138,
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Mljet_veliki_most.jpg/800px-Mljet_veliki_most.jpg"},
+  {id:2,icon:"⛪",name:"St. Mary's Isle",km:"5.1 km",color:"#C5A03E",lat:42.7418,lng:17.4418,
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Mljet_benediktiner.jpg/800px-Mljet_benediktiner.jpg"},
+  {id:3,icon:"🧂",name:"Soline",km:"7.8 km",color:"#0096C7",lat:42.7310,lng:17.4668,
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Soline_bay_Mljet.jpg/800px-Soline_bay_Mljet.jpg"},
+  {id:4,icon:"🏨",name:"Pomena",km:"10.3 km",color:"#52B788",lat:42.7447,lng:17.3768,
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Pomena_harbour_Mljet.jpg/800px-Pomena_harbour_Mljet.jpg"},
+  {id:5,icon:"🌿",name:"Goveđari",km:"12.1 km",color:"#9B7FE0",lat:42.7438,lng:17.4298,
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Govedjari_village_Mljet.jpg/800px-Govedjari_village_Mljet.jpg"}
+];
+
+var TOURS_META=[
+  {id:0, diff:"d-easy", km:"12", time:"2h", elev:"+180m", stops:"6", price:"€80",
+   bg:"linear-gradient(135deg,#1B4D8C,#2D7BB6,#83C5BE)",
+   gmap:"https://www.openstreetmap.org/export/embed.html?bbox=17.36%2C42.72%2C17.50%2C42.77&layer=mapnik&marker=42.7440%2C17.4220",
+   svg:"tour1"},
+  {id:1, diff:"d-easy", km:"18", time:"3h", elev:"+250m", stops:"7", price:"€100",
+   bg:"linear-gradient(135deg,#E8AB6E,#D4AF5F,#83C5BE)",
+   gmap:"https://www.openstreetmap.org/export/embed.html?bbox=17.36%2C42.72%2C17.50%2C42.77&layer=mapnik&marker=42.7447%2C17.3768",
+   svg:"tour2"},
+  {id:2, diff:"d-med", km:"25", time:"4h", elev:"+450m", stops:"5", price:"€250",
+   bg:"linear-gradient(135deg,#1B2C5A,#3A4A82,#1B6C9C)",
+   gmap:"https://www.openstreetmap.org/export/embed.html?bbox=17.46%2C42.70%2C17.55%2C42.75&layer=mapnik&marker=42.7244%2C17.5048",
+   svg:"tour3"},
+  {id:3, diff:"d-expert", km:"50+", time:"8h", elev:"+850m", stops:"10", price:"€400–500",
+   bg:"linear-gradient(135deg,#FAB378,#D4AF5F,#83C5BE)",
+   gmap:"https://www.openstreetmap.org/export/embed.html?bbox=17.30%2C42.68%2C17.72%2C42.80&layer=mapnik&marker=42.7380%2C17.5500",
+   svg:"tour4"}
+];
+
+// SVG illustrations for the 4 tours (navy/cream/gold theme)
+var TOUR_SVGS = {
+  tour1: '<svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><defs><linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1B4D8C"/><stop offset="60%" stop-color="#2D7BB6"/><stop offset="100%" stop-color="#83C5BE"/></linearGradient><linearGradient id="lake1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0E5C8C"/><stop offset="100%" stop-color="#0A3A5E"/></linearGradient></defs><rect width="400" height="200" fill="url(#sky1)"/><path d="M0,110 Q60,80 130,95 T280,90 T400,105 L400,200 L0,200 Z" fill="#1B4D2E" opacity="0.65"/><path d="M0,130 Q80,105 170,120 T340,115 T400,125 L400,200 L0,200 Z" fill="#2D7045" opacity="0.85"/><ellipse cx="200" cy="160" rx="190" ry="28" fill="url(#lake1)"/><ellipse cx="200" cy="155" rx="22" ry="6" fill="#2D5A27"/><rect x="194" y="142" width="12" height="13" fill="#F4E8D0"/><polygon points="194,142 200,134 206,142" fill="#9F2B3A"/><line x1="200" y1="134" x2="200" y2="128" stroke="#D4AF5F" stroke-width="1.5"/><circle cx="200" cy="127" r="1.5" fill="#D4AF5F"/><polygon points="40,135 50,110 60,135" fill="#1B4D2E"/><polygon points="42,128 50,108 58,128" fill="#2D7045"/><polygon points="350,140 360,115 370,140" fill="#1B4D2E"/><polygon points="80,140 88,120 96,140" fill="#1B4D2E"/><polygon points="320,142 328,122 336,142" fill="#1B4D2E"/></svg>',
+  tour2: '<svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><defs><linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8AB6E"/><stop offset="60%" stop-color="#D4AF5F"/><stop offset="100%" stop-color="#83C5BE"/></linearGradient><linearGradient id="sea2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1B6C9C"/><stop offset="100%" stop-color="#0A3A5E"/></linearGradient></defs><rect width="400" height="200" fill="url(#sky2)"/><circle cx="320" cy="65" r="22" fill="#F4E8D0" opacity="0.85"/><circle cx="320" cy="65" r="14" fill="#FAF3E3"/><path d="M0,115 Q60,90 130,100 T280,95 T400,108 L400,200 L0,200 Z" fill="#5A4A35" opacity="0.55"/><path d="M0,135 Q80,115 170,125 T340,120 T400,130 L400,200 L0,200 Z" fill="#3A6A40" opacity="0.85"/><rect x="0" y="138" width="400" height="62" fill="url(#sea2)"/><rect x="105" y="120" width="14" height="18" fill="#F4E8D0"/><polygon points="103,120 112,113 121,120" fill="#9F2B3A"/><rect x="125" y="118" width="16" height="20" fill="#FAF3E3"/><polygon points="123,118 133,109 143,118" fill="#A86F1F"/><rect x="146" y="121" width="12" height="17" fill="#F4E8D0"/><polygon points="144,121 152,114 160,121" fill="#9F2B3A"/><ellipse cx="240" cy="160" rx="14" ry="3" fill="#FAF3E3"/><line x1="240" y1="160" x2="240" y2="148" stroke="#5A4A35" stroke-width="1"/><polygon points="240,150 240,158 247,156" fill="#F4E8D0"/><ellipse cx="290" cy="170" rx="11" ry="2.5" fill="#D4AF5F"/><line x1="290" y1="170" x2="290" y2="160" stroke="#5A4A35" stroke-width="1"/><polygon points="40,138 50,113 60,138" fill="#1B4D2E"/><polygon points="350,140 360,118 370,140" fill="#1B4D2E"/></svg>',
+  tour3: '<svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><defs><linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1B2C5A"/><stop offset="100%" stop-color="#3A4A82"/></linearGradient><radialGradient id="caveGlow" cx="50%" cy="55%"><stop offset="0%" stop-color="#83C5BE" stop-opacity="0.9"/><stop offset="40%" stop-color="#1B6C9C" stop-opacity="0.5"/><stop offset="100%" stop-color="#0A1F3A" stop-opacity="0"/></radialGradient><linearGradient id="rock3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5A4A35"/><stop offset="100%" stop-color="#2A1F12"/></linearGradient></defs><rect width="400" height="200" fill="url(#sky3)"/><circle cx="80" cy="55" r="14" fill="#F4E8D0" opacity="0.7"/><path d="M0,200 L0,90 Q40,70 80,85 L120,75 Q160,90 180,80 L220,90 Q260,70 290,85 L320,75 Q360,90 400,80 L400,200 Z" fill="url(#rock3)"/><path d="M150,200 Q150,130 200,115 Q250,130 250,200 Z" fill="#0A1F3A"/><ellipse cx="200" cy="150" rx="40" ry="48" fill="url(#caveGlow)"/><ellipse cx="200" cy="195" rx="60" ry="6" fill="#1B6C9C" opacity="0.7"/><circle cx="200" cy="180" r="3" fill="#F4E8D0"/><ellipse cx="200" cy="184" rx="6" ry="2" fill="#F4E8D0" opacity="0.6"/><polygon points="170,115 173,128 176,115" fill="#3A2918"/><polygon points="185,118 188,134 191,118" fill="#3A2918"/><polygon points="210,115 213,130 216,115" fill="#3A2918"/><polygon points="225,118 228,128 231,118" fill="#3A2918"/><circle cx="40" cy="30" r="1" fill="#F4E8D0"/><circle cx="180" cy="20" r="1" fill="#F4E8D0"/><circle cx="260" cy="35" r="1" fill="#F4E8D0"/><circle cx="340" cy="25" r="1" fill="#F4E8D0"/></svg>',
+  tour4: '<svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><defs><linearGradient id="sky4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FAB378"/><stop offset="50%" stop-color="#D4AF5F"/><stop offset="100%" stop-color="#83C5BE"/></linearGradient><linearGradient id="beach4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FAF3E3"/><stop offset="100%" stop-color="#E8C674"/></linearGradient><linearGradient id="sea4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#83C5BE"/><stop offset="100%" stop-color="#0A3A5E"/></linearGradient></defs><rect width="400" height="200" fill="url(#sky4)"/><circle cx="320" cy="55" r="26" fill="#F4E8D0" opacity="0.95"/><circle cx="320" cy="55" r="18" fill="#FAF3E3"/><path d="M0,110 Q70,85 150,95 T320,90 T400,100 L400,140 L0,140 Z" fill="#3A4A82" opacity="0.5"/><path d="M0,130 Q80,108 170,118 T340,115 T400,125 L400,150 L0,150 Z" fill="#1B4D2E" opacity="0.7"/><rect x="0" y="138" width="400" height="35" fill="url(#sea4)"/><path d="M0,173 Q100,168 200,172 T400,170 L400,200 L0,200 Z" fill="url(#beach4)"/><line x1="60" y1="190" x2="55" y2="160" stroke="#5A4A35" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="48" cy="158" rx="14" ry="4" fill="#1B4D2E" transform="rotate(-25 48 158)"/><ellipse cx="62" cy="156" rx="14" ry="4" fill="#2D7045" transform="rotate(25 62 156)"/><ellipse cx="55" cy="153" rx="12" ry="4" fill="#1B4D2E" transform="rotate(-5 55 153)"/><line x1="340" y1="190" x2="345" y2="158" stroke="#5A4A35" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="338" cy="156" rx="14" ry="4" fill="#1B4D2E" transform="rotate(-25 338 156)"/><ellipse cx="352" cy="154" rx="14" ry="4" fill="#2D7045" transform="rotate(25 352 154)"/></svg>'
+};
+
+// Real GPS route — Lake Loop Classic
+var SIM=[
+  [42.7860,17.3781],[42.7820,17.3795],[42.7780,17.3810],[42.7720,17.3800],
+  [42.7472,17.3778],[42.7447,17.3768],[42.7430,17.3800],[42.7410,17.3860],
+  [42.7400,17.3930],[42.7395,17.4000],[42.7402,17.4070],[42.7415,17.4120],
+  [42.7445,17.4135],[42.7480,17.4138],[42.7490,17.4155],[42.7495,17.4200],
+  [42.7488,17.4255],[42.7472,17.4300],[42.7452,17.4340],[42.7435,17.4370],
+  [42.7418,17.4418],[42.7400,17.4455],[42.7380,17.4495],[42.7358,17.4550],
+  [42.7338,17.4610],[42.7315,17.4650],[42.7310,17.4668],[42.7308,17.4620],
+  [42.7318,17.4555],[42.7335,17.4480],[42.7355,17.4405],[42.7375,17.4345],
+  [42.7395,17.4318],[42.7418,17.4300],[42.7438,17.4298],[42.7452,17.4255],
+  [42.7462,17.4200],[42.7468,17.4140],[42.7465,17.4075],[42.7460,17.4010],
+  [42.7452,17.3950],[42.7445,17.3890],[42.7458,17.3835],[42.7488,17.3838],
+  [42.7720,17.3795],[42.7790,17.3790],[42.7860,17.3781]
+];
+var EX=[0,7,15,24,34,42,49,56,63,70,77,84,92,100,108,117,127,136,145,154,163,172,181,190,197,205,213,221,229,237,245,252,259,266,273,281,289,297,305,313,320,326,331,336,340,345,350];
+var EY=[36,35,33,31,28,22,18,16,14,15,16,17,18,16,14,12,11,11,12,15,18,20,23,25,26,27,28,27,26,24,22,20,18,17,16,15,16,17,18,21,24,27,30,32,33,34,36];
+
+// ═══════ STATE ═══════════════════════════════════════════════════
+var lang='en', tourActive=false, paused=false, startTime=null;
+var timerInt=null;
+var dist=0, elev=0, cal=0, maxSpd=0, bat=100;
+var visited=[], realLat=42.7440, realLon=17.4220;
+var toastTimer=null, sosTimer=null, sosProg=0;
+
+// ═══════ HELPERS ═════════════════════════════════════════════════
+function L(k){ return (TR[lang]||TR.en)[k] || TR.en[k] || k; }
+function el(id){ return document.getElementById(id); }
+function set(id,v){ var e=el(id); if(e) e.textContent=v; }
+function getCP(i){
+  var meta=CPS_META[i];
+  var t=(TR[lang]||TR.en).cps[i] || TR.en.cps[i];
+  return Object.assign({},meta,t);
+}
+function getTour(i){
+  var meta=TOURS_META[i];
+  var t=(TR[lang]||TR.en).tours[i] || TR.en.tours[i];
+  return Object.assign({},meta,t);
+}
+
+// ═══════ LANGUAGE ════════════════════════════════════════════════
+function setLang(code){
+  lang=code;
+  // Sync both dropdowns to current language
+  if(document.getElementById('splash-lang-select')) document.getElementById('splash-lang-select').value = code;
+  if(document.getElementById('header-lang-select')) document.getElementById('header-lang-select').value = code;
+  el('s-btn').textContent = L('splash_btn');
+  if(el('app').classList.contains('show')) applyUI();
+  // Rebuild dynamic content (CPs, tours) in the new language
+  if(typeof buildVisited==='function') buildVisited();
+  if(typeof buildTours==='function') buildTours();
+}
+
+function applyUI(){
+  document.querySelectorAll('[data-k]').forEach(function(e){
+    var v = (TR[lang]||TR.en)[e.getAttribute('data-k')];
+    if(v!==undefined) e.textContent=v;
+  });
+  // GPS label respects current state
+  if(tourActive){
+    set('g-lbl', L('gps_on'));
+  } else if(gpsAcquired){
+    set('g-lbl', L('gps_on'));
+  } else {
+    set('g-lbl', L('gps_off'));
+  }
+  set('btn-go', L('btn_start'));
+  set('btn-pause', paused ? L('btn_resume') : L('btn_pause'));
+  set('btn-end', L('btn_end'));
+  set('btn-map', L('btn_map'));
+  set('sos-title', L('sos_title'));
+  buildGuide();
+  buildTours();
+  buildVisited();
+  fetchWeather();
+}
+
+// ═══════ PANELS ══════════════════════════════════════════════════
+function showPanel(name){
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
+  el('panel-'+name).classList.add('on');
+  var tab=document.querySelector('.tab[data-panel="'+name+'"]');
+  if(tab) tab.classList.add('on');
+}
+
+// ═══════ GUIDE ═══════════════════════════════════════════════════
+function buildGuide(){
+  el('guide-list').innerHTML = CPS_META.map(function(_,i){
+    var c=getCP(i);
+    var imgStyle="background-image:url("+c.photo+");background-size:cover;background-position:center;";
+    return '<div class="g-card" id="gc'+i+'">'
+      +'<div class="g-head" onclick="toggleCard('+i+')">'
+      +'<div class="g-num" style="background:'+c.color+'">'+(i+1)+'</div>'
+      +'<div style="flex:1"><div class="g-ttl">'+c.icon+' '+c.name+'</div><div class="g-sub">'+c.short+'</div></div>'
+      +'<div class="g-km">'+c.km+'</div><div class="g-chev">▼</div>'
+      +'</div>'
+      +'<div class="g-body">'
+      +'<div class="g-img" style="'+imgStyle+'"></div>'
+      +'<p>'+c.desc+'</p>'
+      +'<div class="g-hist">📜 '+c.hist+'</div>'
+      +c.tips.map(function(t){return '<div class="tip-item">'+t+'</div>';}).join('')
+      +'<div class="tags">'+c.tags.map(function(t){return '<span class="tag">'+t+'</span>';}).join('')+'</div>'
+      +'</div></div>';
+  }).join('');
+}
+
+function toggleCard(i){
+  var card=el('gc'+i);
+  if(card) card.classList.toggle('open');
+}
+
+function openCP(i){
+  showPanel('guide');
+  setTimeout(function(){
+    var c=el('gc'+i);
+    if(c){ c.classList.add('open'); c.scrollIntoView({behavior:'smooth',block:'start'}); }
+  },80);
+}
+
+// ═══════ TOURS ═══════════════════════════════════════════════════
+function buildTours(){
+  el('tours-list').innerHTML = TOURS_META.map(function(_,i){
+    var t=getTour(i);
+    var svg = TOUR_SVGS[t.svg] || '';
+    return '<div class="t-card t-card-v2">'
+      +'<div class="t-illust">'+svg+'</div>'
+      +'<div class="t-ribbon '+t.diff+'">'+t.dl+'</div>'
+      +'<div class="t-body">'
+      +'<div class="t-route-label">'+t.sub+'</div>'
+      +'<div class="t-name">'+t.name+'</div>'
+      +'<p class="t-desc">'+t.desc+'</p>'
+      +'<div class="t-stats-row">'
+      +'<div class="t-stat"><div class="t-stat-v">'+t.km+'</div><div class="t-stat-l">km</div></div>'
+      +'<div class="t-stat"><div class="t-stat-v">'+t.time+'</div><div class="t-stat-l">'+L('l_time')+'</div></div>'
+      +'<div class="t-stat"><div class="t-stat-v">'+t.elev+'</div><div class="t-stat-l">⬆</div></div>'
+      +'</div>'
+      +'<ul class="t-stops">'+t.stops_list.map(function(s){return '<li class="t-stop"><span class="t-dot"></span>'+s+'</li>';}).join('')+'</ul>'
+      +'<div class="t-bottom">'
+      +'<div class="t-price"><span class="t-price-num">'+t.price+'</span><span class="t-price-lbl">'+L('l_per_person')+'</span></div>'
+      +'<button class="t-book-btn" data-tour-name="'+t.name+'">'+L('l_book_now')+' <span class="t-book-arrow">→</span></button>'
+      +'</div>'
+      +'</div></div>';
+  }).join('');
+
+  // Wire up Book Now buttons (open WhatsApp with pre-filled message)
+  document.querySelectorAll('.t-book-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var tourName = btn.getAttribute('data-tour-name') || 'eBike Tour';
+      var msg = (L('l_book_msg') || 'Hello Active Mljet! I would like to book the "{tour}" tour. Please send me details.').replace('{tour}', tourName);
+      var url = 'https://wa.me/38598608861?text=' + encodeURIComponent(msg);
+      window.open(url, '_blank');
+    });
+  });
+}
+
+function loadTour(id){
+  showPanel('tracker');
+  showToast('🚴', getTour(id).name, L('btn_start'));
+}
+
+// ═══════ TOUR CONTROL ════════════════════════════════════════════
+// ═══════ TOUR — Real GPS tracking ═════════════════════════════
+var lastTrackedLat=null, lastTrackedLon=null, lastTrackedTime=null;
+var tourGpsWatchId=null;
+var elevAtStart=null;
+
+function startTour(){
+  // Require GPS permission before starting
+  if(!navigator.geolocation){
+    showToast('⚠️','GPS','Geolocation not supported on this device');
+    return;
+  }
+
+  tourActive=true; paused=false; startTime=Date.now();
+  dist=0; elev=0; cal=0; maxSpd=0; bat=100; visited=[];
+  lastTrackedLat=null; lastTrackedLon=null; lastTrackedTime=null;
+  elevAtStart=null;
+
+  el('gdot').classList.add('on');
+  set('g-lbl', L('gps_on'));
+  el('btn-go').style.display='none';
+  el('ctrl-active').style.display='flex';
+  set('btn-pause', L('btn_pause'));
+  set('btn-end', L('btn_end'));
+  el('v-bat').textContent='100%';
+  el('v-bat').style.color='#52B788';
+  el('v-spd').textContent='0.0';
+  el('v-dst').textContent='0.0';
+  el('v-cps').textContent='0/6';
+  el('elev-ind').style.display='block';
+
+  // Start real GPS watch — high accuracy, fast updates
+  if(tourGpsWatchId!==null) navigator.geolocation.clearWatch(tourGpsWatchId);
+  tourGpsWatchId = navigator.geolocation.watchPosition(
+    onTourGpsUpdate,
+    onTourGpsError,
+    { enableHighAccuracy:true, maximumAge:1000, timeout:15000 }
+  );
+
+  timerInt=setInterval(tickTimer, 1000);
+  showToast('🚴', L('toast_start'), L('toast_start_x'));
+}
+
+function pauseTour(){
+  paused=!paused;
+  set('btn-pause', paused ? L('btn_resume') : L('btn_pause'));
+  // When pausing, reset last position so distance calc doesn't jump on resume
+  if(paused){
+    lastTrackedLat=null; lastTrackedLon=null; lastTrackedTime=null;
+  }
+}
+
+function stopTour(){
+  tourActive=false; paused=false;
+  clearInterval(timerInt);
+  if(tourGpsWatchId!==null){
+    navigator.geolocation.clearWatch(tourGpsWatchId);
+    tourGpsWatchId=null;
+  }
+  el('btn-go').style.display='';
+  el('ctrl-active').style.display='none';
+  if(gpsAcquired){
+    el('gdot').classList.add('on');
+    set('g-lbl', L('gps_on'));
+  } else {
+    el('gdot').classList.remove('on');
+    set('g-lbl', L('gps_off'));
+  }
+  updateFinalStats();
+  buildVisited();
+  showToast('🏁', L('toast_end'), dist.toFixed(1)+' km · '+visited.length+'/6 · 🔋'+Math.round(bat)+'%');
+  showPanel('stats');
+}
+
+// ═══════ Haversine distance in km ════════════════════════════════
+function haversineKm(lat1, lon1, lat2, lon2){
+  var R = 6371; // Earth radius km
+  var dLat = (lat2-lat1) * Math.PI/180;
+  var dLon = (lon2-lon1) * Math.PI/180;
+  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+          Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) *
+          Math.sin(dLon/2)*Math.sin(dLon/2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+
+// ═══════ REAL GPS update during tour ═════════════════════════════
+function onTourGpsUpdate(p){
+  if(!tourActive || paused) return;
+
+  var lat = p.coords.latitude;
+  var lon = p.coords.longitude;
+  var now = Date.now();
+  var altitude = p.coords.altitude; // may be null
+  var gpsSpeed = p.coords.speed;    // m/s, may be null
+  var accuracy = p.coords.accuracy; // meters
+
+  // Update global GPS state
+  realLat = lat; realLon = lon;
+  gpsAcquired = true;
+  el('gdot').classList.add('on');
+  set('g-lbl', 'GPS: '+lat.toFixed(4)+'°N');
+
+  // Skip very inaccurate readings (>50m) to avoid drift jumps
+  if(accuracy && accuracy > 50){
+    return;
+  }
+
+  // First fix: just record, no distance yet
+  if(lastTrackedLat === null){
+    lastTrackedLat = lat;
+    lastTrackedLon = lon;
+    lastTrackedTime = now;
+    if(altitude !== null) elevAtStart = altitude;
+    return;
+  }
+
+  // Compute distance from last point
+  var segKm = haversineKm(lastTrackedLat, lastTrackedLon, lat, lon);
+  var dtSec = (now - lastTrackedTime) / 1000;
+
+  // Filter: ignore tiny GPS noise (< 3m) when standing still
+  if(segKm < 0.003){
+    return;
+  }
+
+  // Compute speed in km/h — prefer GPS-reported speed if available
+  var spdKmh;
+  if(gpsSpeed !== null && gpsSpeed >= 0){
+    spdKmh = gpsSpeed * 3.6;
+  } else if(dtSec > 0){
+    spdKmh = (segKm / dtSec) * 3600;
+  } else {
+    spdKmh = 0;
+  }
+
+  // Sanity check: ignore unrealistic speeds (>80 km/h on bike)
+  if(spdKmh > 80) return;
+
+  // Accumulate
+  dist += segKm;
+  if(spdKmh > maxSpd) maxSpd = spdKmh;
+
+  // Elevation gain (only positive changes)
+  if(altitude !== null && elevAtStart !== null){
+    var rel = altitude - elevAtStart;
+    // We track only cumulative gain via incremental positive deltas
+    // Easier: just sum positive segment elevation deltas
+  }
+
+  // Calories: rough estimate ~30 kcal per km on eBike
+  cal += segKm * 30;
+
+  // Battery drain: ~0.4% per minute of riding (200km eBike battery, 4–6h)
+  var dtMin = dtSec / 60;
+  bat = Math.max(0, bat - dtMin * 0.4);
+
+  // Update UI
+  set('v-spd', spdKmh.toFixed(1));
+  set('v-dst', dist.toFixed(2));
+
+  var batEl = el('v-bat');
+  batEl.textContent = Math.round(bat) + '%';
+  batEl.style.color = bat>50 ? '#52B788' : bat>25 ? '#F48C06' : '#EF233C';
+
+  // Tour progress: based on distance vs Lake Loop ~12km
+  var pct = Math.min(100, Math.round(dist / 12 * 100));
+  el('prog-fill').style.width = pct + '%';
+  set('prog-pct', pct + '%');
+
+  // Move elevation indicator along profile based on progress %
+  var ei = Math.min(EX.length-1, Math.floor(pct / 100 * (EX.length-1)));
+  el('elev-ind').setAttribute('cx', EX[ei]);
+  el('elev-ind').setAttribute('cy', EY[ei]);
+
+  // Check checkpoint proximity (within ~150m radius)
+  CPS_META.forEach(function(c, i){
+    if(visited.indexOf(i) >= 0) return;
+    var distToCp = haversineKm(lat, lon, c.lat, c.lng);
+    if(distToCp < 0.15){
+      visited.push(i);
+      set('v-cps', visited.length + '/6');
+      triggerCP(getCP(i));
+      buildVisited();
+    }
+  });
+
+  // Save current position for next iteration
+  lastTrackedLat = lat;
+  lastTrackedLon = lon;
+  lastTrackedTime = now;
+}
+
+function onTourGpsError(err){
+  console.warn('GPS error during tour:', err && err.code, err && err.message);
+  if(err.code === 2){
+    showToast('📡','GPS', 'Signal weak — keep going');
+  } else if(err.code === 3){
+    showToast('⏱️','GPS', 'Searching...');
+  }
+  // Permission denied: do nothing - tour continues, watchPosition will retry
+}
+
+function tickTimer(){
+  if(paused) return;
+  var s=Math.floor((Date.now()-startTime)/1000);
+  set('v-tim', String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'));
+}
+
+function triggerCP(c){
+  el('cp-alert-wrap').style.display='block';
+  set('ca-ico',c.icon);
+  set('ca-ttl',c.name);
+  set('ca-txt',c.short+' '+L('alert_hint'));
+  if(navigator.vibrate) navigator.vibrate([200,100,200]);
+  showToast(c.icon,'📍 '+c.name,c.short);
+}
+
+function updateFinalStats(){
+  var s=startTime?Math.floor((Date.now()-startTime)/1000):0;
+  var avg=s>0?dist/(s/3600):0;
+  set('fs-d',dist.toFixed(1));
+  set('fs-t',Math.floor(s/60)+':'+String(s%60).padStart(2,'0'));
+  set('fs-s',avg.toFixed(1));
+  set('fs-e',Math.round(elev).toString());
+  set('fs-c',Math.round(cal).toString());
+  set('fs-m',maxSpd.toFixed(1));
+}
+
+function buildVisited(){
+  el('vis-list').innerHTML = CPS_META.map(function(_,i){
+    var c=getCP(i);
+    var done=visited.indexOf(i)>=0;
+    return '<div class="vis-row">'
+      +'<div class="vis-ball '+(done?'d':'p')+'">'+(done?'✓':i+1)+'</div>'
+      +'<div style="flex:1"><div class="vis-name">'+c.icon+' '+c.name+'</div><div class="vis-sub">'+c.short+'</div></div>'
+      +'<div class="vis-km">'+(done?c.km:'—')+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+// ═══════ WEATHER (Open-Meteo, no API key) ═══════════════════════
+function windDir(deg){
+  var d=['N','NE','E','SE','S','SW','W','NW'];
+  return d[Math.round((deg%360)/45)%8];
+}
+function wxIcon(code){
+  if(code===0) return '☀️';
+  if(code<=2)  return '🌤';
+  if(code===3) return '☁️';
+  if(code<=49) return '🌫';
+  if(code<=59) return '🌦';
+  if(code<=69) return '🌧';
+  if(code<=79) return '❄️';
+  if(code<=84) return '🌦';
+  return '⛈';
+}
+function fetchWeather(){
+  var url='https://api.open-meteo.com/v1/forecast?latitude=42.744&longitude=17.422'
+    +'&current=temperature_2m,windspeed_10m,wind_direction_10m,weathercode,apparent_temperature'
+    +'&wind_speed_unit=kmh&timezone=Europe%2FZagreb';
+  set('wx-b', L('wx_loading'));
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      var c=d.current;
+      var temp=Math.round(c.temperature_2m);
+      var feel=Math.round(c.apparent_temperature);
+      var wind=Math.round(c.windspeed_10m);
+      var wdir=windDir(c.wind_direction_10m);
+      var ico=wxIcon(c.weathercode);
+      set('wx-t', temp+'°C');
+      set('wx-w', wind+' km/h '+wdir);
+      set('wx-u', ico+' '+L('wx_feels')+' '+feel+'°');
+      var warn;
+      if(temp>=35)              warn=L('wx_extreme_heat');
+      else if(temp>=30)         warn=L('wx_heat_risk');
+      else if(temp>=25)         warn=L('wx_drink_water');
+      else if(wind>=35)         warn=L('wx_strong_wind');
+      else if(c.weathercode>=51)warn=L('wx_rain');
+      else if(temp<=10)         warn=L('wx_cold');
+      else                      warn=L('wx_good');
+      set('wx-b', warn);
+    })
+    .catch(function(){
+      set('wx-t','—°C');
+      set('wx-w','—');
+      set('wx-u','—');
+      set('wx-b', L('wx_offline'));
+    });
+}
+function startWeather(){
+  fetchWeather();
+  setInterval(fetchWeather, 10*60*1000);
+}
+
+// ═══════ MAP — Google Maps iframe with native Google pin ═══════
+function reloadMapAt(lat, lon, zoom){
+  // Reload the iframe centered on user GPS coords. Google Maps embed
+  // shows a red pin at the q= location — passing coords as q= shows
+  // a pin at user's real position.
+  zoom = zoom || 16;
+  var url = 'https://maps.google.com/maps?q='+lat+','+lon+'&ll='+lat+','+lon+'&z='+zoom+'&t=k&hl=en&output=embed';
+  var iframe = el('gmap');
+  if(iframe) iframe.src = url;
+}
+
+function showRentalView(){
+  // Reset map to Polače Activemljet view with native Google pin on rental
+  var iframe = el('gmap');
+  if(iframe) iframe.src = 'https://maps.google.com/maps?q=Activemljet+E-bike+rental+Pola%C4%8De+Mljet&ll=42.78608,17.3781&z=17&t=k&hl=en&output=embed';
+}
+
+// ═══════ GPS v3.5 — Simple & Robust ═══════════════════════════════
+var gpsAcquired = false;
+var bgGpsWatchId = null;
+var pendingCenterOnUser = false;
+var locatingTimeout = null;
+
+function startBackgroundGpsWatch(){
+  if(!navigator.geolocation) return;
+  if(bgGpsWatchId !== null){
+    try { navigator.geolocation.clearWatch(bgGpsWatchId); } catch(e){}
+  }
+  try {
+    bgGpsWatchId = navigator.geolocation.watchPosition(
+      onGpsSuccess,
+      onGpsError,
+      { enableHighAccuracy:true, maximumAge:5000, timeout:30000 }
+    );
+  } catch(e){
+    console.warn('watchPosition threw:', e);
+  }
+}
+
+function onGpsSuccess(p){
+  var lat = p.coords.latitude;
+  var lon = p.coords.longitude;
+  var acc = Math.round(p.coords.accuracy || 0);
+
+  realLat = lat;
+  realLon = lon;
+  gpsAcquired = true;
+
+  el('sos-coords').textContent='GPS: '+lat.toFixed(5)+'° N, '+lon.toFixed(5)+'° E\nAccuracy: ±'+acc+'m · NP Mljet';
+  el('gdot').classList.add('on');
+
+  if(tourActive){
+    set('g-lbl','GPS: '+lat.toFixed(4)+'°N');
+  } else {
+    set('g-lbl', L('gps_on'));
+  }
+
+  // Show the GPS overlay pin only after user actually clicks "My location"
+  // (otherwise rental pin should keep showing — map still shows Polače)
+
+  // If user clicked "My location" and is waiting, re-center the iframe map on them
+  if(pendingCenterOnUser){
+    pendingCenterOnUser = false;
+    if(locatingTimeout){ clearTimeout(locatingTimeout); locatingTimeout=null; }
+    reloadMapAt(lat, lon, 17);
+    showToast('📍','My location', lat.toFixed(4)+'°N, '+lon.toFixed(4)+'°E (±'+acc+'m)');
+  }
+}
+
+function onGpsError(err){
+  // Just log; never popup. The user just won't see green light.
+  console.warn('GPS error code='+(err&&err.code)+':', err&&err.message);
+}
+
+function initGPS(){
+  startBackgroundGpsWatch();
+}
+
+// ═══════ My location button ═══════
+// ═══════ My location button — explicitly requests GPS permission ═════
+function centerOnUser(){
+  console.log('[GPS] My location button clicked at', new Date().toISOString());
+  console.log('[GPS] Protocol:', location.protocol, '| Host:', location.hostname);
+  console.log('[GPS] navigator.geolocation available:', !!navigator.geolocation);
+
+  // Pre-flight check: HTTPS is required for Geolocation API
+  if(location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1'){
+    console.warn('[GPS] BLOCKED: Not HTTPS. Geolocation API requires HTTPS.');
+    showGpsHelpModal('http');
+    return;
+  }
+  if(!navigator.geolocation){
+    showToast('⚠️','GPS','Not supported on this browser');
+    return;
+  }
+
+  showToast('📡','GPS', 'Requesting location permission...');
+  pendingCenterOnUser = true;
+
+  // EXPLICITLY request GPS permission — this triggers the browser's permission prompt.
+  // Calling getCurrentPosition synchronously inside a click handler counts as a user
+  // gesture, which is required for the prompt to appear in modern browsers.
+  console.log('[GPS] Calling navigator.geolocation.getCurrentPosition with high accuracy...');
+
+  navigator.geolocation.getCurrentPosition(
+    function(p){
+      console.log('[GPS] SUCCESS:', p.coords.latitude, p.coords.longitude, '±'+p.coords.accuracy+'m');
+      pendingCenterOnUser = false;
+      if(locatingTimeout){ clearTimeout(locatingTimeout); locatingTimeout=null; }
+      realLat = p.coords.latitude;
+      realLon = p.coords.longitude;
+      gpsAcquired = true;
+      var acc = Math.round(p.coords.accuracy || 0);
+      el('gdot').classList.add('on');
+      set('g-lbl', L('gps_on'));
+      reloadMapAt(realLat, realLon, 16);
+      startBackgroundGpsWatch();
+      showToast('📍','My location', realLat.toFixed(5)+'°N, '+realLon.toFixed(5)+'°E (±'+acc+'m)');
+    },
+    function(err){
+      console.warn('[GPS] ERROR code='+err.code+': '+err.message);
+      pendingCenterOnUser = false;
+      if(locatingTimeout){ clearTimeout(locatingTimeout); locatingTimeout=null; }
+
+      if(err.code === 1){
+        showGpsHelpModal('denied');
+      } else if(err.code === 2){
+        showGpsHelpModal('unavailable');
+      } else if(err.code === 3){
+        // Try once more with lower accuracy (network/Wi-Fi)
+        showToast('📡','GPS', 'Trying network location...');
+        navigator.geolocation.getCurrentPosition(
+          function(p){
+            realLat=p.coords.latitude; realLon=p.coords.longitude; gpsAcquired=true;
+            var acc=Math.round(p.coords.accuracy||0);
+            el('gdot').classList.add('on');
+            set('g-lbl', L('gps_on'));
+            reloadMapAt(realLat, realLon, 14);
+            startBackgroundGpsWatch();
+            showToast('📍','My location', realLat.toFixed(4)+'°N, '+realLon.toFixed(4)+'°E (±'+acc+'m)');
+          },
+          function(){ showGpsHelpModal('timeout'); },
+          { enableHighAccuracy:false, timeout:10000, maximumAge:120000 }
+        );
+      } else {
+        showGpsHelpModal('unavailable');
+      }
+    },
+    { enableHighAccuracy:true, timeout:20000, maximumAge:0 }
+  );
+
+  if(locatingTimeout) clearTimeout(locatingTimeout);
+  locatingTimeout = setTimeout(function(){
+    if(pendingCenterOnUser){
+      pendingCenterOnUser = false;
+      showGpsHelpModal('timeout');
+    }
+  }, 30000);
+}
+
+// ═══════ GPS Help Modal — user-friendly permission instructions ═══
+function showGpsHelpModal(reason){
+  var icon='📍', title='', body='';
+  if(reason==='http'){
+    icon='🔒';
+    title='HTTPS Required';
+    body='GPS only works on HTTPS websites.<br><br>You appear to be opening this page locally or via HTTP. Please access the site via your secure GitHub Pages URL (starting with <strong>https://</strong>).';
+  } else if(reason==='denied'){
+    icon='🔒';
+    title=L('gps_help_denied_title');
+    body=L('gps_help_denied_body');
+  } else if(reason==='unavailable'){
+    icon='📡';
+    title=L('gps_help_unavail_title');
+    body=L('gps_help_unavail_body');
+  } else if(reason==='timeout'){
+    icon='⏱️';
+    title=L('gps_help_timeout_title');
+    body=L('gps_help_timeout_body');
+  } else if(reason==='not_supported'){
+    icon='⚠️';
+    title=L('gps_help_unsup_title');
+    body=L('gps_help_unsup_body');
+  }
+  el('gps-help-icon').textContent=icon;
+  el('gps-help-title').textContent=title;
+  el('gps-help-body').innerHTML=body;
+  el('gps-help-modal').classList.add('open');
+}
+function closeGpsHelp(){
+  el('gps-help-modal').classList.remove('open');
+}
+
+// ═══════ SOS ═════════════════════════════════════════════════════
+// ═══════ SOS — Real call & WhatsApp (2 contacts) ═════════════
+var SOS_CONTACTS = {
+  '1': { display:'+385 98 608 861',  tel:'+38598608861',  wa:'38598608861',  role:'Owner' },
+  '2': { display:'+385 99 608 8611', tel:'+385996088611', wa:'385996088611', role:'Staff' }
+};
+
+function openSOS(){
+  if(realLat && realLon && gpsAcquired){
+    el('sos-coords').textContent='📡 GPS: '+realLat.toFixed(5)+'° N, '+realLon.toFixed(5)+'° E\nNP Mljet, Croatia';
+  } else {
+    el('sos-coords').textContent='📡 GPS: '+L('sos_gps_locating')+'\nNP Mljet, Croatia';
+  }
+  el('sos-modal').classList.add('open');
+}
+
+function closeSOS(){
+  el('sos-modal').classList.remove('open');
+}
+
+function showConfirm(phoneId, mode){
+  var c = SOS_CONTACTS[phoneId];
+  if(!c) return;
+  if(mode==='call'){
+    el('sos-confirm-ico').textContent='📞';
+    el('sos-confirm-yes-ico').textContent='📞';
+    el('sos-confirm-title').textContent=L('sos_confirm_call_title');
+    el('sos-confirm-text').textContent=L('sos_confirm_call_text')+'\n\n'+c.display;
+  } else {
+    el('sos-confirm-ico').textContent='💬';
+    el('sos-confirm-yes-ico').textContent='💬';
+    el('sos-confirm-title').textContent=L('sos_confirm_wa_title');
+    el('sos-confirm-text').textContent=L('sos_confirm_wa_text')+'\n\n'+c.display;
+  }
+  el('sos-confirm').classList.add('open');
+  el('sos-confirm').setAttribute('data-phone', phoneId);
+  el('sos-confirm').setAttribute('data-mode', mode);
+}
+
+function closeConfirm(){
+  el('sos-confirm').classList.remove('open');
+}
+
+function confirmAction(){
+  var phoneId = el('sos-confirm').getAttribute('data-phone');
+  var mode    = el('sos-confirm').getAttribute('data-mode');
+  var c = SOS_CONTACTS[phoneId];
+  closeConfirm();
+  closeSOS();
+  if(!c) return;
+
+  if(mode==='call'){
+    window.location.href = 'tel:' + c.tel;
+  } else if(mode==='whatsapp'){
+    var msg = L('sos_wa_msg');
+    if(realLat && realLon && gpsAcquired){
+      msg += '\n\n📍 GPS: ' + realLat.toFixed(5) + '°N, ' + realLon.toFixed(5) + '°E';
+      msg += '\n🗺️ https://maps.google.com/?q=' + realLat + ',' + realLon;
+    } else {
+      msg += '\n\n📍 NP Mljet, Croatia';
+    }
+    var url = 'https://wa.me/' + c.wa + '?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank');
+  }
+}
+
+// ═══════ TOAST ═══════════════════════════════════════════════════
+function showToast(ico,ttl,txt){
+  set('t-ico',ico); set('t-ttl',ttl); set('t-txt',txt);
+  var t=document.querySelector('.toast');
+  t.classList.add('show');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){t.classList.remove('show');},4500);
+}
+
+// ═══════ INIT ════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function(){
+  console.log('%c ActiveMljet v3.5 ', 'background:#52B788;color:#000;padding:4px 8px;font-weight:700;font-size:14px');
+  console.log('GPS init: navigator.geolocation =', !!navigator.geolocation);
+  console.log('Protocol:', location.protocol, '| Host:', location.host || '(file)');
+  if(location.protocol !== 'https:' && location.host && location.hostname !== 'localhost'){
+    console.warn('⚠️ GPS REQUIRES HTTPS! Current protocol:', location.protocol);
+  }
+
+  // Splash language dropdown
+  if(el('splash-lang-select')){
+    el('splash-lang-select').addEventListener('change', function(){
+      setLang(this.value);
+    });
+  }
+  // Splash start
+  el('s-btn').addEventListener('click',function(){
+    el('splash').classList.add('out');
+    el('app').classList.add('show');
+    applyUI();
+    // Note: GPS permission is requested ONLY when user clicks "My location" button.
+    // This way the user has clear context for why permission is needed.
+    startWeather();
+  });
+  // Header language dropdown
+  if(el('header-lang-select')){
+    el('header-lang-select').addEventListener('change', function(){
+      setLang(this.value);
+    });
+  }
+  // Logo click → back to splash (so users can re-download PDF anytime)
+  if(el('h-logo-btn')){
+    el('h-logo-btn').addEventListener('click', function(){
+      el('app').classList.remove('show');
+      el('splash').classList.remove('out');
+      // Sync splash dropdown to current language
+      if(el('splash-lang-select')) el('splash-lang-select').value = lang;
+      window.scrollTo(0,0);
+    });
+  }
+  // Tabs
+  document.querySelectorAll('.tab').forEach(function(b){
+    b.addEventListener('click',function(){showPanel(b.getAttribute('data-panel'));});
+  });
+  // Tour controls
+  el('btn-go').addEventListener('click', startTour);
+  el('btn-pause').addEventListener('click', pauseTour);
+  el('btn-end').addEventListener('click', stopTour);
+  el('btn-map').addEventListener('click',function(){
+    // Activemljet eBike rental center is in Polače (42.78608, 17.3781)
+    // Always open in satellite/Earth view (t=k for hybrid)
+    var url;
+    if(gpsAcquired){
+      // Directions from user's location to Activemljet Polače, by bicycle
+      url = 'https://www.google.com/maps/dir/?api=1'
+          +'&origin='+realLat+','+realLon
+          +'&destination=42.78608,17.3781'
+          +'&destination_place_id=Activemljet+E-Bike+Rental+Polace'
+          +'&travelmode=bicycling';
+    } else {
+      // Open Activemljet Polače location in satellite view
+      url = 'https://www.google.com/maps/place/Activemljet/@42.78608,17.3781,200m/data=!3m1!1e3';
+    }
+    window.open(url, '_blank');
+  });
+  // SOS
+  el('sos-open').addEventListener('click', openSOS);
+  el('sos-cancel').addEventListener('click', closeSOS);
+  // Bind all 4 contact buttons (2 phones × Call/WhatsApp) via data attributes
+  document.querySelectorAll('#sos-modal .sos-act').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var phoneId = btn.getAttribute('data-phone');
+      var mode    = btn.getAttribute('data-mode');
+      if(phoneId && mode) showConfirm(phoneId, mode);
+    });
+  });
+  el('sos-confirm-cancel').addEventListener('click', closeConfirm);
+  el('sos-confirm-yes').addEventListener('click', confirmAction);
+  // Map "My location" button
+  el('gps-centr-btn').addEventListener('click', centerOnUser);
+  // HQ button — return to Activemljet view
+  if(el('hq-btn')) el('hq-btn').addEventListener('click', showRentalView);
+
+  // GPS help modal close
+  el('gps-help-close').addEventListener('click', closeGpsHelp);
+
+  // Google Earth button — opens satellite view zoomed to Activemljet Polače
+  el('map-earth-btn').addEventListener('click', function(){
+    // Google Maps satellite view (t=k) at Activemljet Polače rental coords
+    // Works on all devices: opens Google Maps app on mobile, web on desktop
+    var url = 'https://www.google.com/maps/place/Activemljet+E-Bike+Rental/@42.78608,17.3781,150m/data=!3m1!1e3'
+            + '?q=Activemljet+Polace+Mljet';
+    window.open(url, '_blank');
+  });
+
+  buildVisited();
+  el('s-btn').textContent = L('splash_btn');
+});
+</script>
+</body>
+</html>
